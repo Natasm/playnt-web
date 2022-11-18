@@ -1,9 +1,14 @@
-import { AuthInterface } from "../interface/auth"
+interface AuthStateInterface {
+    token?: string
+    userId?: number
+}
 
-export class AuthState{
-    token: string
+export class AuthState {
+    token?: string
+    userId?: number
 
-    constructor(authInterface: AuthInterface) {
-        this.token = authInterface.token
+    constructor(auth: AuthStateInterface) {
+        this.token = auth.token
+        this.userId = auth.userId
     }
 }

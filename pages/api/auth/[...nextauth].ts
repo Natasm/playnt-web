@@ -19,14 +19,16 @@ export const authOptions: NextAuthOptions = {
 
                     const user = { id: credentials?.login }
 
-                    if (response?.data?.auth) {
+                    if (response.status == 201) {
                         return user;
                     } else {
                         return null;
                     }
                 } catch (e) {
-                    throw new Error("There was an error on user authentication");
+                    console.log(e)
                 }
+
+                return null;
             }
         })
     ],

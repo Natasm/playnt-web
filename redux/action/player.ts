@@ -1,7 +1,7 @@
 import { Dispatch } from "redux"
 import { FileSubtitle, Subtitle } from "../../models/subtitle"
 import { setLoadingGlobal, setSubtitlesRedux } from "../actions"
-import { getSubtitles } from "../../services/catalog/subtitle"
+import { getSubtitles } from "../../services/subtitle"
 
 export const searchSubtitle = (query: string, page: number) => {
     return async function (dispatch: Dispatch) {

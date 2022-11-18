@@ -1,14 +1,26 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ContextGlobal } from "../state/global";
+import { ContextState } from "../state/context";
 
-export const contextGlobal = createSlice({
-    name: 'contextGlobal',
-    initialState: new ContextGlobal({ routeActionTriggered: '' }),
+export const contextReducer = createSlice({
+    name: 'context',
+    initialState: new ContextState({}),
     reducers: {
-        setRouteActionTriggered: (state, { payload }) => {
-            return new ContextGlobal({ ...state, routeActionTriggered: payload })
+        setLoadingReducer: (state, { payload }) => {
+            return new ContextState({ ...state, loading: payload })
+        },
+        setScrollTopPositionReducer: (state, { payload }) => {
+            return new ContextState({ ...state, scrollTopPosition: payload })
+        },
+        clearScrollTopPositionReducer: (state) => {
+            return new ContextState({ ...state, scrollTopPosition: 0 })
+        },
+        setSearchGlobalReducer: (state, { payload }) => {
+            return new ContextState({ ...state, search: payload })
+        },
+        setRouteActionTriggeredReducer: (state, { payload }) => {
+            return new ContextState({ ...state, routeActionTriggered: payload })
         }
     }
 })
 
-export default contextGlobal.reducer
+export default contextReducer.reducer

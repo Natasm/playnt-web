@@ -46,8 +46,6 @@ const Player: NextPage = () => {
 
         setUri(torrent.uriStreamFile)
 
-        console.log(torrent.uriStreamFile)
-
         if (!offline.isMediaOffline) {
             startSocketProgress()
         }

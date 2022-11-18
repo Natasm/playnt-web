@@ -6,12 +6,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   setFilesOfMediaChoiced, setInfoHashTorrent, setIsMediaOffline, setLoadingGlobal
 } from '../../../redux/actions';
-import { MediaCatalogResponse } from '../../../services/catalog/interface/response.interface';
+import { EpisodeCatalogResponse, MediaCatalogResponse, SeasonCatalogResponse } from '../../../services/catalog/interface/response.interface';
 import { postTorrent } from '../../../services/torrent';
 import { PostTorrentRequest } from '../../../services/torrent/interface/torrent';
 import DialogFileList from '../openFiles';
 
-export default function InfoMovieMediaList() {
+export default function InfoSerieMediaList() {
 
   const dispatch = useDispatch()
   const contextRedux = useSelector((state: any) => state.context)
@@ -47,9 +47,10 @@ export default function InfoMovieMediaList() {
     setOpen(false);
   };
 
-  const renderMediaItem = (media: MediaCatalogResponse) => {
+  const renderMediaItem = (season: SeasonCatalogResponse, episode: EpisodeCatalogResponse, media: MediaCatalogResponse) => {
+
     return (
-      <Box
+      <Box 
         display="flex"
         justifyContent="center"
       >
@@ -63,10 +64,10 @@ export default function InfoMovieMediaList() {
 
         <Box sx={{ padding: 2 }}>
           <Typography align='center' style={{ color: '#FFFFFF' }}>
-            {`Idioma: ${media.type}` || ''}
+            {`Episódio ${episode.episodeNumberRange} - ${season.seasonNumber}ª Temporada` || ''}
           </Typography>
           <Typography align='center' style={{ color: 'gray' }}>
-            {`Resolução: ${media.resolution}` || ''}
+            {`Idioma: ${media.type} - Resolução: ${media.resolution}` || ''}
           </Typography>
         </Box>
 
@@ -91,8 +92,7 @@ export default function InfoMovieMediaList() {
         onClose={handleCloseModal}
       />
 
-      <Grid container spacing={3}>
-        <Grid item xs></Grid>
+      <Grid container>
 
         <Grid item xs={12}>
           <Box
@@ -101,7 +101,6 @@ export default function InfoMovieMediaList() {
             justifyContent="center"
             style={{ paddingBottom: 20 }}
           >
-
             <img
               width='120'
               height='170'
@@ -117,10 +116,15 @@ export default function InfoMovieMediaList() {
         </Grid>
 
         <Grid item xs={12}>
-          {mediaState.mediaChoiced?.media?.map((media: any) => renderMediaItem(media))}
+          {
+            mediaState.mediaChoiced?.seasons[0]?.episodes?.map((episode: any) =>
+              episode?.media?.map((media: any) =>
+                renderMediaItem(mediaState.mediaChoiced?.seasons[0], episode, media)
+              )
+            )
+          }
         </Grid>
       </Grid>
-
     </Box>
   )
 }

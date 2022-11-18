@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CacheGlobal } from "../state/global";
+import { CacheState } from "../state/cache";
 
-export const cacheGlobal = createSlice({
-    name: 'cacheGlobal',
-    initialState: new CacheGlobal({ filesName: [] }),
+export const cacheReducer = createSlice({
+    name: 'cache',
+    initialState: new CacheState({}),
     reducers: {
-        setCacheGlobal: (state, { payload }) => {
-            return new CacheGlobal({ filesName: payload })
+        setCacheReducer: (state, { payload }) => {
+            return new CacheState({ ...state, filesName: payload })
         }
     }
 })
 
-export default cacheGlobal.reducer
+export default cacheReducer.reducer

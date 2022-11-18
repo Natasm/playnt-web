@@ -1,6 +1,5 @@
 import { Action, configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { useDispatch } from 'react-redux'
-import { createWrapper } from "next-redux-wrapper"
 
 import rootReducer from './../reducers/index'
 

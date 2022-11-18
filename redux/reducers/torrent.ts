@@ -1,26 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Torrent } from "../state/torrent";
+import { TorrentState } from "../state/torrent";
 
-export const torrent = createSlice({
+export const torrentReducer = createSlice({
     name: 'torrent',
-    initialState: new Torrent({
-        infoHash: '',
-        uriStreamFile: ''
-    }),
+    initialState: new TorrentState({}),
     reducers: {
-        setInfoHashTorrent: (state, { payload }) => {
-            return new Torrent({
-                infoHash: payload,
-                uriStreamFile: state.uriStreamFile
-            })
+        setInfoHashTorrentReducer: (state, { payload }) => {
+            return new TorrentState({ ...state, infoHash: payload })
         },
-        setUriStreamFileTorrent: (state, { payload }) => {
-            return new Torrent({
-                infoHash: state.infoHash,
-                uriStreamFile: payload
-            })
+        setUriStreamFileTorrentReducer: (state, { payload }) => {
+            return new TorrentState({ ...state, uriStreamFile: payload })
         },
     }
 })
 
-export default torrent.reducer
+export default torrentReducer.reducer

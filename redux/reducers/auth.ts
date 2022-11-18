@@ -3,10 +3,13 @@ import { AuthState } from "../state/auth";
 
 export const authReducer = createSlice({
     name: 'auth',
-    initialState: new AuthState({ token: '' }),
+    initialState: new AuthState({}),
     reducers: {
-        setToken: (state, { payload }) => {
+        setTokenReducer: (state, { payload } ) => {
             return new AuthState({ ...state, token: payload })
+        },
+        setUserIdReducer: (state, { payload }) => {
+            return new AuthState({ ...state, userId: payload })
         }
     }
 })

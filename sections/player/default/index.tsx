@@ -6,12 +6,13 @@ import { useSelector } from "react-redux";
 import videojs from 'video.js';
 import { setFilesSubtitleChoicedRedux } from "../../../redux/actions";
 import store, { useAppDispatch } from "../../../redux/store";
-import { downloadSubtitle } from "../../../services/catalog/subtitle";
+import { downloadSubtitle } from "../../../services/subtitle";
 
 import ControlsPlayer from "../controls";
 import InfoStream from "../information/infoStream";
 
 import 'react-toastify/dist/ReactToastify.css';
+import { postUserStream } from "../../../services/catalog";
 
 interface Props {
     uri: string,
@@ -245,6 +246,19 @@ export default function DefaultPlayer(props: Props) {
         return () => {
             window.removeEventListener("mousemove", handleMouseMove)
             if (time) clearTimeout(time)
+        }
+    }, [])
+
+    var intervalUpdateUserStream: any;
+
+    useEffect(() => {
+
+        intervalUpdateUserStream = setInterval(
+            postUserStream({}), 60000
+        )
+
+        return () => {
+            clearInterval(intervalUpdateUserStream)
         }
     }, [])
 

@@ -1,12 +1,16 @@
 import { FileSubtitle, Subtitle } from "../../models/subtitle"
-import { SubtitleInterface } from "../interface/subtitle"
 
-export class SubtitleState{
+interface SubtitleStateInterface {
+    subtitles?: Subtitle[]
+    filesSubtitleChoiced?: FileSubtitle[]
+}
+
+export class SubtitleState {
     subtitles: Subtitle[]
-    filesSubtitleChoiced: FileSubtitle[] 
+    filesSubtitleChoiced: FileSubtitle[]
 
-    constructor(subtitle: SubtitleInterface) {
-        this.subtitles = subtitle.subtitles
-        this.filesSubtitleChoiced = subtitle.filesSubtitleChoiced
+    constructor(subtitle: SubtitleStateInterface) {
+        this.subtitles = subtitle.subtitles || []
+        this.filesSubtitleChoiced = subtitle.filesSubtitleChoiced || []
     }
 }

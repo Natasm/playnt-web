@@ -3,12 +3,12 @@ import { SubtitleState } from "../state/subtitle";
 
 export const subtitleReducer = createSlice({
     name: 'subtitle',
-    initialState: new SubtitleState({ subtitles: [], filesSubtitleChoiced: [] }),
+    initialState: new SubtitleState({}),
     reducers: {
-        setSubtitlesRedux: (state, { payload }) => {
+        setSubtitlesReducer: (state, { payload }) => {
             return new SubtitleState({ ...state, subtitles: payload })
         },
-        setFilesSubtitleChoicedRedux: (state, { payload }) => {
+        setFilesSubtitleChoicedReducer: (state, { payload }) => {
             return new SubtitleState({ ...state, filesSubtitleChoiced: payload })
         }
     }

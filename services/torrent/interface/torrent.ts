@@ -1,5 +1,10 @@
 import { Files } from "./file"
 
+export interface PostTorrentRequest {
+    magnet: string
+    media_id: number
+}
+
 export interface FileInfo{
     name: string
     uri: string

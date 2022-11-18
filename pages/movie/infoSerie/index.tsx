@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import AppBarMovieSimple from "../../../sections/movie/appBarSimple";
 import Background from "../../../sections/movie/background";
-import InfoMovieMediaList from "../../../sections/movie/info/mediaList";
+import InfoSerieMediaList from "../../../sections/movie/info/serieMediaList";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -26,9 +26,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-const InfoMovie: NextPage = () => {
+const InfoSerie: NextPage = () => {
 
     const loadingGlobal = useSelector((state: any) => state.loadingGlobal)
+
     const media = useSelector((state: any) => state.media)
 
     useEffect(() => {
@@ -41,7 +42,7 @@ const InfoMovie: NextPage = () => {
             <AppBarMovieSimple />
 
             <div style={{ paddingTop: 100 }}>
-                <InfoMovieMediaList />
+                <InfoSerieMediaList />
             </div>
 
             <Backdrop
@@ -55,4 +56,4 @@ const InfoMovie: NextPage = () => {
     )
 }
 
-export default InfoMovie
+export default InfoSerie

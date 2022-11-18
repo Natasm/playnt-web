@@ -1,23 +1,24 @@
 import axios from "axios"
 
 import { isVideoFile } from "../../utils/video";
-import { FileInfo, Torrents } from "./interface/torrent";
+import { FileInfo, PostTorrentRequest, Torrents } from "./interface/torrent";
 
 const URL_API_STREAM = process.env.NEXT_PUBLIC_URL_API_STREAM
 
-export const postTorrent = async (magnet: string) => {
+export const postTorrent = async (postTorrentRequest: PostTorrentRequest) => {
     
     var infoHash = '';
     let infoFiles: FileInfo[] = [];
 
     try { 
-        infoHash = magnet?.split('magnet:?xt=urn:btih:')[1]?.split('&')[0] 
+        infoHash = postTorrentRequest.magnet?.split('magnet:?xt=urn:btih:')[1]?.split('&')[0] 
     } 
     catch (e) {
         return { error: 'Não foi possível fragmentar link' }
     }
 
-    await axios.post(`${URL_API_STREAM}/torrent`, { magnet: `magnet:?xt=urn:btih:${infoHash}` }).then(async (res) => {
+    await axios.post(`${URL_API_STREAM}/torrent`, postTorrentRequest).then(async (res) => {
+        
         infoHash = res.data.torrent.infoHash
 
         for (var name of res.data.files.names) {

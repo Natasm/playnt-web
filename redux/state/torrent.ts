@@ -1,11 +1,14 @@
-import { TorrentInterface } from "../interface/torrent"
+interface TorrentStateInterface {
+    infoHash?: string
+    uriStreamFile?: string
+}
 
-export class Torrent {
-    infoHash: string
-    uriStreamFile: string
+export class TorrentState {
+    infoHash?: string
+    uriStreamFile?: string
 
-    constructor(torrentInterface: TorrentInterface) {
-        this.infoHash = torrentInterface.infoHash
-        this.uriStreamFile = torrentInterface.uriStreamFile
+    constructor(torrent: TorrentStateInterface) {
+        this.infoHash = torrent.infoHash
+        this.uriStreamFile = torrent.uriStreamFile
     }
 }

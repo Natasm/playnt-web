@@ -14,8 +14,8 @@ export default function Background(props: BackgroundProps) {
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundImage:
-                    `linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.9)),` +
-                    `url(${props.url})`,
+                    `linear-gradient(to bottom, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 1)),` +
+                    `url(${props.url})`
             }}
             color='black'
         >

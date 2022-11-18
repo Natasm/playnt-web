@@ -1,9 +1,11 @@
-import { PlayerInterface } from "../interface/player"
+interface PlayerStateInterface {
+    permissionToHideControls?: boolean
+}
 
-export class PlayerState{
+export class PlayerState {
     permissionToHideControls: boolean
 
-    constructor(player: PlayerInterface) {
-        this.permissionToHideControls = player.permissionToHideControls
+    constructor(player: PlayerStateInterface) {
+        this.permissionToHideControls = player.permissionToHideControls || true
     }
 }

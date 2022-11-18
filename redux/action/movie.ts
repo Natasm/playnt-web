@@ -1,18 +1,19 @@
 import { Dispatch } from "redux";
 import store from "../../redux/store";
-import { addMediaList, addPage, setLoadingGlobal } from "../actions";
-import { getListMedia, getListMediaBySearch } from "../../services/catalog/media";
+import { findMovie, getCatalogList, getCatalogListBySearch, postMovieWebscraper } from "../../services/catalog";
+import { MovieWebScraper } from "../../services/catalog/interface/webscraper.interface";
+import { addMediaList, addPage, setLoadingGlobal, setMediaChoiced } from "../actions";
 
 export const loadMedia = () => {
     return async function (dispatch: Dispatch) {
         try {
             dispatch(setLoadingGlobal(true))
-            
+
             dispatch(addPage())
 
             const page = store.getState().mediaPage.page
 
-            const response = await getListMedia(page);
+            const response = await getCatalogList(page);
 
             dispatch(addMediaList(response.data))
 
@@ -30,7 +31,7 @@ export const loadMediaBySearch = (search: string) => {
 
             const page = store.getState().mediaPage.page
 
-            const response = await getListMediaBySearch(search, page);
+            const response = await getCatalogListBySearch(search, page);
 
             dispatch(addMediaList(response.data))
 
@@ -38,3 +39,25 @@ export const loadMediaBySearch = (search: string) => {
         finally { dispatch(setLoadingGlobal(false)) }
     }
 }
+
+export const postMovieWebScraperAction = (movie: MovieWebScraper) => {
+    return async function (dispatch: Dispatch) {
+        try {
+            dispatch(setLoadingGlobal(true))
+
+            var movieResponse = await postMovieWebscraper(movie)
+
+            var movieFound = await findMovie({ id: movieResponse.data.id })
+
+            dispatch(setMediaChoiced(movieFound.data))
+
+        } catch (e) {
+            console.log(e)
+        }
+        finally {
+            dispatch(setLoadingGlobal(false))
+        }
+    }
+}
+
+  
