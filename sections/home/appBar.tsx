@@ -49,7 +49,7 @@ export default function AppBarMain() {
                             PLAYNT
                         </Typography>
 
-                        <Button sx={{ color: 'white' }} onClick={navigateToMoviePage}>Filmes</Button>
+                        <Button sx={{ color: 'white' }} onClick={navigateToMoviePage}>Filmes e Séries</Button>
                     </Box>
 
                     <div style={{ marginLeft: 'auto'}}>

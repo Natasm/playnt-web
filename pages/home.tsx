@@ -13,8 +13,9 @@ import { hasCookie, getCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from '../interfaces/jwt';
 import { useDispatch } from 'react-redux';
-import { setUserIdReducer } from '../redux/actions';
+import { resetPlayerReducer, setUserIdReducer } from '../redux/actions';
 import ContinueWatching from '../sections/home/continue-watching';
+import FeaturedDescription from '../sections/home/featured-description';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -54,6 +55,8 @@ const HomePage: NextPage<HomeProps> = (props) => {
 
   useEffect(() => {
     dispatch(setUserIdReducer(Number(props.userId)))
+
+    dispatch(resetPlayerReducer())
   }, [])
 
   return (
@@ -61,7 +64,11 @@ const HomePage: NextPage<HomeProps> = (props) => {
 
       <AppBarMain />
 
-      <div style={{ paddingTop: '60vh' }}>
+      <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 20 }}>
+        <FeaturedDescription />
+      </div>
+
+      <div>
         <ContinueWatching userId={props.userId} />
         <TrendingList />
       </div>

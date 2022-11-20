@@ -43,7 +43,8 @@ export const {
 export const { 
     setMediaIdReducer,
     setInfoHashFromMediaReducer, 
-    setInfoFilesFromMediaReducer 
+    setInfoFilesFromMediaReducer,
+    resetMediaReducer
 } = mediaReducer.actions
 
 export const { 
@@ -51,7 +52,8 @@ export const {
     setTitleTypePlayerReducer,
     setWatchedTillPlayerReducer,
     setFileNameStreamPlayerReducer,
-    setInfoHashPlayerReducer
+    setInfoHashPlayerReducer,
+    resetPlayerReducer
 } = playerReducer.actions
 
 export const { 

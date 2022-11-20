@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import { setCacheReducer, setLoadingReducer } from "../../../redux/actions"
-import { getUserStreamWatching } from "../../../services/catalog"
+import { deleteUserStream, getUserStreamWatching } from "../../../services/catalog"
 import { deleteDirectoryOrFileListStream, getDirectoryOrFileListStream } from "../../../services/files"
 
 export const loadCacheAction = () => {
@@ -44,22 +44,22 @@ export const deleteCacheSelectedAction = (listNamesToDelete: any[]) => {
 }
 
 
-/*export const loadContinueWatchingAction = (userId: number) => {
+export const removeUserWatchingAction = (userStreamId: number) => {
     return async function (dispatch: Dispatch) {
         try {
             dispatch(setLoadingReducer(true))
 
-            const response = await getUserStreamWatching(userId)
+            const response = await deleteUserStream(userStreamId)
 
-            if (response.data) {
-                dispatch(setCacheReducer(response.data.names))
-            } else {
-                dispatch(setCacheReducer([]))
+            if (response?.data) {
+                return response.data
             }
 
-        } catch (e) { console.log(e) }
+        } catch (e) { 
+            console.log(e) 
+        }
         finally {
             dispatch(setLoadingReducer(false))
         }
     }
-}*/
+}

@@ -10,9 +10,13 @@ export const loadCatalogAction = (pushData: boolean = false) => {
         try {
             dispatch(setLoadingReducer(true))
 
-            dispatch(addPageCatalogReducer())
+            if (pushData) {
+                dispatch(addPageCatalogReducer())
 
-            const page = store.getState().catalog.page
+                var page = store.getState().catalog.page
+            } else {
+                var page = 1
+            }
 
             const response = await getCatalogList(page);
 
@@ -22,11 +26,11 @@ export const loadCatalogAction = (pushData: boolean = false) => {
                 dispatch(setTitlesCatalogReducer(response.data))
             }
 
-        } catch (e) { 
-            console.log(e) 
+        } catch (e) {
+            console.log(e)
         }
-        finally { 
-            dispatch(setLoadingReducer(false)) 
+        finally {
+            dispatch(setLoadingReducer(false))
         }
     }
 }
@@ -36,23 +40,27 @@ export const loadCatalogBySearchAction = (search: string, pushData: boolean = fa
         try {
             dispatch(setLoadingReducer(true))
 
-            dispatch(addPageCatalogReducer())
+            if (pushData) {
+                dispatch(addPageCatalogReducer())
 
-            const page = store.getState().catalog.page
+                var page = store.getState().catalog.page
+            } else {
+                var page = 1
+            }
 
             const response = await getCatalogListBySearch(search, page);
 
-            if(pushData) {
+            if (pushData) {
                 dispatch(addTitlesCatalogReducer(response.data))
             } else {
                 dispatch(setTitlesCatalogReducer(response.data))
             }
 
-        } catch (e) { 
-            console.log(e) 
+        } catch (e) {
+            console.log(e)
         }
-        finally { 
-            dispatch(setLoadingReducer(false)) 
+        finally {
+            dispatch(setLoadingReducer(false))
         }
     }
 }
@@ -68,7 +76,7 @@ export const postTorrentAction = (postTorrentRequest: PostTorrentRequest) => {
                 dispatch(setMediaIdReducer(postTorrentRequest.media_id))
                 dispatch(setInfoHashFromMediaReducer(response.infoHash))
                 dispatch(setInfoFilesFromMediaReducer(response.infoFiles))
-                
+
                 dispatch(setInfoHashPlayerReducer(response.infoHash))
             }
 

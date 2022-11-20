@@ -14,6 +14,9 @@ export const mediaReducer = createSlice({
         setInfoFilesFromMediaReducer: (state, { payload }) => {
             return new MediaState({ ...state, infoFiles: payload })
         },
+        resetMediaReducer: () => {
+            return new MediaState({})
+        },
     }
 })
 

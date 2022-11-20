@@ -14,7 +14,7 @@ import { hasCookie, getCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
 import { useDispatch } from "react-redux";
-import { setUserIdReducer } from "../../../redux/actions";
+import { resetPlayerReducer, setUserIdReducer } from "../../../redux/actions";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -52,6 +52,8 @@ const MovieTitlePage: NextPage<MovieTitleProps> = (props) => {
 
     useEffect(() => {
         dispatch(setUserIdReducer(Number(props.userId)))
+
+        dispatch(resetPlayerReducer())
     }, [])
 
     const contextRedux: ContextState = useSelector((state: any) => state.context)

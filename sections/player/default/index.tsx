@@ -318,7 +318,13 @@ export default function DefaultPlayer(props: Props) {
                         progressDownload={props.progressDownload}
                     />
 
-                    <div style={{ paddingTop: '65vh' }}>
+                    <div 
+                        style={{ 
+                            position: 'fixed',
+                            bottom: 20,
+                            width: '100%'
+                        }}
+                    >
                         <ControlsPlayer
                             duration={duration}
                             timePosition={timePosition}

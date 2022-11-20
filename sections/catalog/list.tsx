@@ -8,6 +8,7 @@ import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { MovieWebScraper, SerieWebScraper } from '../../services/catalog/interface/webscraper.interface';
 import { 
+    resetMediaReducer,
     setHasMoreItemsCatalogReducer, 
     setInfoFilesFromMediaReducer, 
     setInfoHashFromMediaReducer, 
@@ -37,7 +38,6 @@ export default function CatalogList() {
     useEffect(() => {
         
         if (contextRedux.routeActionTriggered !== 'POP') {
-            dispatch(setPageCatalogReducer(1))
             dispatch(setTitlesCatalogReducer([]))
             dispatch(setHasMoreItemsCatalogReducer(true))
             
@@ -82,7 +82,6 @@ export default function CatalogList() {
     useEffect(() => {
         
         if (contextRedux.search !== '') {
-            dispatch(setPageCatalogReducer(1))
             dispatch(setTitlesCatalogReducer([]))
             dispatch(setHasMoreItemsCatalogReducer(true))
 
@@ -100,6 +99,8 @@ export default function CatalogList() {
             dispatch(setRouteActionTriggeredReducer("PUSH"))
 
             try {
+                dispatch(resetMediaReducer())
+
                 dispatch(postMovieWebScraperAction(movie))
 
                 router.push('/catalog/movie')
@@ -139,6 +140,8 @@ export default function CatalogList() {
             dispatch(setRouteActionTriggeredReducer("PUSH"))
 
             try {
+                dispatch(resetMediaReducer())
+
                 dispatch(postSerieWebScraperAction(serie))
 
                 router.push('/catalog/serie')

@@ -1,22 +1,19 @@
 import { useEffect, useState } from 'react';
 import { Button, Card, CardActions, CardContent, CardMedia, ImageList, ImageListItem, Typography } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router'
-import { useSelector } from 'react-redux';
-import store, { useAppDispatch } from '../../redux/store';
+import { useAppDispatch } from '../../redux/store';
 
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { ContextState } from '../../redux/state/context';
-import { CatalogState } from '../../redux/state/catalog';
 import { getUserStreamWatching } from '../../services/catalog';
-import { AuthState } from '../../redux/state/auth';
-import { MovieCatalogResponse, UserStreamWatchingResponse } from '../../services/catalog/interface/response.interface';
+import { UserStreamWatchingResponse } from '../../services/catalog/interface/response.interface';
 import { Box } from '@material-ui/core';
-import { setFileNameStreamPlayerReducer, setMediaIdReducer, setMovieChoicedReducer, setSerieChoicedReducer, setTitleTypePlayerReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
-import { PlayerState, PlayerTitleType } from '../../redux/state/player';
+import { setFileNameStreamPlayerReducer, setMovieChoicedReducer, setSerieChoicedReducer, setTitleTypePlayerReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
+import { PlayerTitleType } from '../../redux/state/player';
 import { postTorrentAction } from '../catalog/redux/actions';
-import { MediaState } from '../../redux/state/media';
-import { castMovieCatalogResponse } from './utils/formatters';
+import DialogConfirmRemoveUserWatching from './dialog/confirm-remove-user-watching';
+import { removeUserWatchingAction } from './redux/actions';
 
 interface ContinueWatchingProps {
     userId: number
@@ -31,21 +28,17 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
     const dispatch = useAppDispatch()
 
-    const contextRedux: ContextState = useSelector((state: any) => state.context)
-    const catalogRedux: CatalogState = useSelector((state: any) => state.catalog)
-
-    const mediaRedux: MediaState = useSelector((state: any) => state.media)
-    const playerRedux: PlayerState = useSelector((state: any) => state.player)
+    const [openModalDelete, setOpenModalDelete] = useState(false)
+    const [userStreamIdToDelete, setUserStreamIdToDelete] = useState(0)
 
     const [watchingList, setWatchingList] = useState<UserStreamWatchingResponse[]>([])
 
+    const getWatchingList = async () => {
+        const data = await getUserStreamWatching(Number(props.userId))
+        setWatchingList(data)
+    }
+
     useEffect(() => {
-
-        const getWatchingList = async () => {
-            const data = await getUserStreamWatching(Number(props.userId))
-            setWatchingList(data)
-        }
-
         getWatchingList()
     }, [])
 
@@ -75,6 +68,16 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
         return (
             <ImageListItem key={Math.random()}>
+
+                <div style={{ textAlign: 'center', backgroundColor: 'black' }}>
+                    <Button onClick={() => {
+                        setUserStreamIdToDelete(watching.id)
+                        setOpenModalDelete(true)
+                    }} color="error">
+                        <DeleteIcon />
+                    </Button>
+                </div>
+
                 <Card sx={{ height: '100%' }}>
                     <CardMedia
                         component="img"
@@ -114,7 +117,7 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                 try {
                     await dispatch(postTorrentAction({
                         magnet: watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.magnet,
-                        media_id: watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.id
+                        media_id: Number(watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.id)
                     }))
 
                     router.push('/player')
@@ -127,6 +130,16 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
         return (
             <ImageListItem key={Math.random()}>
                 <Card sx={{ height: '100%' }}>
+
+                    <div style={{ textAlign: 'center', backgroundColor: 'black' }}>
+                        <Button onClick={() => {
+                            setUserStreamIdToDelete(watching.id)
+                            setOpenModalDelete(true)
+                        }} color="error">
+                            <DeleteIcon />
+                        </Button>
+                    </div>
+
                     <CardMedia
                         component="img"
                         image={watching?.watchingSerie?.imagePath || ''}
@@ -150,8 +163,24 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
         )
     }
 
+    const removeWatching = async () => {
+        const response = await dispatch(removeUserWatchingAction(Number(userStreamIdToDelete)))
+    
+        if (response) {
+            getWatchingList()
+        }
+
+        setOpenModalDelete(false)
+    }
+
     return (
         <Box style={{ padding: 20 }}>
+
+            <DialogConfirmRemoveUserWatching
+                open={openModalDelete}
+                onClose={() => setOpenModalDelete(false)}
+                onAction={removeWatching}
+            />
 
             {
                 watchingList?.length > 0 &&

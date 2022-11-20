@@ -19,6 +19,9 @@ export const playerReducer = createSlice({
         },
         setInfoHashPlayerReducer: (state, { payload }) => {
             return new PlayerState({ ...state, infoHash: payload })
+        },
+        resetPlayerReducer: () => {
+            return new PlayerState({})
         }
     }
 })
