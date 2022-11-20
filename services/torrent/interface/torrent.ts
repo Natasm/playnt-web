@@ -7,7 +7,6 @@ export interface PostTorrentRequest {
 
 export interface FileInfo{
     name: string
-    uri: string
 }
 
 export interface Torrent {

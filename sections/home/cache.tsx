@@ -6,16 +6,18 @@ import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { useState } from 'react';
-import { deleteCacheSelected, loadCache } from '../../redux/action/home';
 import { useAppDispatch } from '../../redux/store';
-import { setCacheGlobal } from '../../redux/actions';
+import { setCacheReducer } from '../../redux/actions';
+import { deleteCacheSelectedAction, loadCacheAction } from './redux/actions';
+import { ContextState } from '../../redux/state/context';
+import { CacheState } from '../../redux/state/cache';
 
 export function DialogButtonCache() {
 
     const dispatch = useAppDispatch();
 
-    const loadingGlobal = useSelector((state: any) => state.loadingGlobal)
-    const cacheGlobal = useSelector((state: any) => state.cacheGlobal)
+    const contextRedux: ContextState = useSelector((state: any) => state.context)
+    const cacheRedux: CacheState = useSelector((state: any) => state.cache)
 
     const [open, setOpen] = useState(false)
 
@@ -23,11 +25,11 @@ export function DialogButtonCache() {
 
     const handleClose = () => {
         setOpen(false)
-        dispatch(setCacheGlobal([]))
+        dispatch(setCacheReducer([]))
     };
 
     const handleOpen = () => {
-        dispatch(loadCache())
+        dispatch(loadCacheAction())
         setOpen(true)
     }
 
@@ -44,19 +46,19 @@ export function DialogButtonCache() {
             if (elements[key]?.checked) listNamesToDelete.push(key)
         }
 
-        dispatch(deleteCacheSelected(listNamesToDelete))
+        dispatch(deleteCacheSelectedAction(listNamesToDelete))
     }
 
     return (
         <>
             {
-                !loadingGlobal.loading &&
+                !contextRedux.loading &&
 
                 <Dialog onClose={handleClose} open={open}>
                     <DialogTitle>Selecione para apagar filmes/séries baixados ou baixando</DialogTitle>
                     <List sx={{ pt: 0 }}>
                         {
-                            cacheGlobal.filesName?.map((filename: string) => (
+                            cacheRedux.filesName?.map((filename: string) => (
                                 <ListItem key={filename + Math.random()}>
                                     <FormControlLabel
                                         key={filename + Math.random()}

@@ -1,6 +1,6 @@
 import { AppBar, Button, Typography, Box, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
-import { setRouteActionTriggered } from "../../redux/actions";
+import { setRouteActionTriggeredReducer } from "../../redux/actions";
 import { useAppDispatch } from "../../redux/store";
 import { DialogButtonCache } from "./cache";
 
@@ -11,8 +11,8 @@ export default function AppBarMain() {
     const route = useRouter()
 
     const navigateToMoviePage = () => {
-        dispatch(setRouteActionTriggered("PUSH"))
-        route.push('movie')
+        dispatch(setRouteActionTriggeredReducer("PUSH"))
+        route.push('catalog')
     }
 
     const navigateToDownloadedPage = () => {
@@ -31,7 +31,7 @@ export default function AppBarMain() {
                 }}
             >
                 <Toolbar>
-                    <Box  sx={{ flexGrow: 1, display: { xs: 'table-row', md: 'flex' } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'table-row', md: 'flex' } }}>
                         <Typography
                             variant="h4"
                             noWrap
@@ -53,7 +53,7 @@ export default function AppBarMain() {
                     </Box>
 
                     <div style={{ marginLeft: 'auto'}}>
-                        <Button sx={{ color: 'white' }} onClick={navigateToDownloadedPage}>Baixados</Button>
+                        {/*<Button sx={{ color: 'white' }} onClick={navigateToDownloadedPage}>Baixados</Button>*/}
                         <DialogButtonCache />
                     </div>
                 </Toolbar>

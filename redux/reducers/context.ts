@@ -14,7 +14,7 @@ export const contextReducer = createSlice({
         clearScrollTopPositionReducer: (state) => {
             return new ContextState({ ...state, scrollTopPosition: 0 })
         },
-        setSearchGlobalReducer: (state, { payload }) => {
+        setSearchReducer: (state, { payload }) => {
             return new ContextState({ ...state, search: payload })
         },
         setRouteActionTriggeredReducer: (state, { payload }) => {

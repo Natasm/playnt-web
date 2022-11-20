@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ImageList, ImageListItem } from '@mui/material';
 import { getMoviesByPopularityTheMovieDB } from '../../services/themoviedb';
 import { TheMovieDBMovieInfo } from '../../services/themoviedb/interface/themoviedb';
+import { Box, Typography } from '@material-ui/core';
 
 const URL_IMAGES_THEMOVIEDB = process.env.NEXT_PUBLIC_URL_IMAGES_THEMOVIEDB
 
@@ -41,12 +42,29 @@ export default function TrendingList() {
     }
 
     return (
-        <ImageList cols={4} gap={2}>
+        <Box style={{ padding: 20 }}>
+
             {
-                data.map((item: TheMovieDBMovieInfo) => {
-                    return renderItem(item.poster_path)
-                })
+                data?.length > 0 &&
+                <h2
+                    style={{
+                        fontWeight: 200,
+                        letterSpacing: '.2rem',
+                        color: 'white',
+                        textDecoration: 'none',
+                    }}
+                >
+                    Filmes em Alta
+                </h2>
             }
-        </ImageList>
+
+            <ImageList cols={4} gap={2}>
+                {
+                    data.map((item: TheMovieDBMovieInfo) => {
+                        return renderItem(item.poster_path)
+                    })
+                }
+            </ImageList>
+        </Box>
     )
 };

@@ -1,6 +1,5 @@
 import NextAuth, { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from "next-auth/providers/credentials";
-import { login } from '../../../services/auth';
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -15,15 +14,8 @@ export const authOptions: NextAuthOptions = {
             credentials: {},
             async authorize(credentials: any, req) {
                 try {
-                    const response = await login(credentials?.login, credentials?.password)
-
-                    const user = { id: credentials?.login }
-
-                    if (response.status == 201) {
-                        return user;
-                    } else {
-                        return null;
-                    }
+                    const user = { id: credentials?.login, email: credentials?.login }
+                    return user;
                 } catch (e) {
                     console.log(e)
                 }
@@ -33,7 +25,7 @@ export const authOptions: NextAuthOptions = {
         })
     ],
     pages: {
-        signIn: "/auth/signin",
+        signIn: "/auth/signIn",
     },
 }
 

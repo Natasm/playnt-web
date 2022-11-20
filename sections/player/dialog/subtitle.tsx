@@ -9,29 +9,31 @@ import { useSelector } from 'react-redux';
 import { Button, DialogContent, TextField, Typography, } from '@mui/material';
 import { useState } from 'react';
 import { useAppDispatch } from '../../../redux/store';
-import { searchSubtitle } from '../../../redux/action/player';
 import { FileSubtitle, Subtitle } from '../../../models/subtitle';
-import { setFilesSubtitleChoicedRedux, setPermissionToHideControlsPlayer } from '../../../redux/actions';
+import { ContextState } from '../../../redux/state/context';
+import { SubtitleState } from '../../../redux/state/subtitle';
+import { setFilesSubtitleChoicedReducer, setPermissionToHideControlsPlayerReducer } from '../../../redux/actions';
+import { searchSubtitleAction } from '../redux/actions';
 
 export function SubtitleDialog() {
 
     const dispatch = useAppDispatch();
 
-    const loadingGlobal = useSelector((state: any) => state.loadingGlobal)
-    const subtitleRedux = useSelector((state: any) => state.subtitle)
+    const contextRedux: ContextState = useSelector((state: any) => state.context)
+    const subtitleRedux: SubtitleState = useSelector((state: any) => state.subtitle)
 
     const [open, setOpen] = useState(false)
 
     const [query, setQuery] = useState('')
 
     const handleClose = () => {
-        dispatch(setPermissionToHideControlsPlayer(true))
+        dispatch(setPermissionToHideControlsPlayerReducer(true))
         setOpen(false)
         setQuery('')
     };
 
     const handleOpen = () => {
-        dispatch(setPermissionToHideControlsPlayer(false))
+        dispatch(setPermissionToHideControlsPlayerReducer(false))
         setOpen(true)
     }
 
@@ -40,17 +42,17 @@ export function SubtitleDialog() {
     };
 
     const search = async () => {
-        dispatch(searchSubtitle(query, 1))
+        dispatch(searchSubtitleAction(query, 1))
     }
 
     const selectFileSubtitle = (fileSubtitle: FileSubtitle) => {
-        dispatch(setFilesSubtitleChoicedRedux([fileSubtitle]))
+        dispatch(setFilesSubtitleChoicedReducer([fileSubtitle]))
     }
 
     return (
         <>
             {
-                !loadingGlobal.loading &&
+                !contextRedux.loading &&
 
                 <Dialog fullWidth maxWidth={'md'} onClose={handleClose} open={open}>
                     <DialogTitle sx={{ margin: '0 auto' }}>

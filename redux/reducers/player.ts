@@ -7,6 +7,18 @@ export const playerReducer = createSlice({
     reducers: {
         setPermissionToHideControlsPlayerReducer: (state, { payload }) => {
             return new PlayerState({ ...state, permissionToHideControls: payload })
+        },
+        setTitleTypePlayerReducer: (state, { payload }) => {
+            return new PlayerState({ ...state, titleType: payload })
+        },
+        setWatchedTillPlayerReducer: (state, { payload }) => {
+            return new PlayerState({ ...state, watchedTill: payload })
+        },
+        setFileNameStreamPlayerReducer: (state, { payload }) => {
+            return new PlayerState({ ...state, fileNameStream: payload })
+        },
+        setInfoHashPlayerReducer: (state, { payload }) => {
+            return new PlayerState({ ...state, infoHash: payload })
         }
     }
 })

@@ -3,8 +3,17 @@ import { GetServerSideProps, NextPage } from "next";
 import { unstable_getServerSession } from "next-auth/next"
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { ContextState } from "../../redux/state/context";
+import { MediaState } from "../../redux/state/media";
+import { PlayerState } from "../../redux/state/player";
 import DefaultPlayer from "../../sections/player/default";
 import { authOptions } from "../api/auth/[...nextauth]";
+
+import { hasCookie, getCookie } from 'cookies-next'
+import jwt_decode from 'jwt-decode'
+import { JwtDecodeUserToken } from "../../interfaces/jwt";
+import { useDispatch } from "react-redux";
+import { setUserIdReducer } from "../../redux/actions";
 
 const URL_WEB_SOCKET_STREAM = process.env.NEXT_PUBLIC_WEB_SOCKET_STREAM
 
@@ -12,25 +21,44 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-    if (session) {
-        return {
-            props: {}
-        }
+    if (session && hasCookie('user-token', { req: context.req })) {
+        try {
+            var jwt_decoded: JwtDecodeUserToken = jwt_decode(getCookie('user-token', { req: context.req })?.toString() || "")
+
+            if (jwt_decoded?.id) {
+                return {
+                    props: {
+                        userId: jwt_decoded.id
+                    }
+                }
+            }
+        } catch (e) { }
     }
 
     return {
         redirect: {
-            destination: '/auth/signin',
+            destination: '/auth/signIn',
             permanent: false,
         },
     }
 }
 
-const Player: NextPage = () => {
+interface PlayerProps {
+    userId: number
+}
 
-    const torrent = useSelector((state: any) => state.torrent)
-    const offline = useSelector((state: any) => state.offline)
-    const loadingGlobal = useSelector((state: any) => state.loadingGlobal)
+const URL_API_STREAM = process.env.NEXT_PUBLIC_URL_API_STREAM
+
+const PlayerPage: NextPage<PlayerProps> = (props) => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setUserIdReducer(Number(props.userId)))
+    }, [])
+
+    const contextRedux: ContextState = useSelector((state: any) => state.context)
+    const playerRedux: PlayerState = useSelector((state: any) => state.player)
 
     const [uri, setUri] = useState('')
 
@@ -44,11 +72,9 @@ const Player: NextPage = () => {
 
     useEffect(() => {
 
-        setUri(torrent.uriStreamFile)
+        setUri(`${URL_API_STREAM}/torrent/stream?infohash=${playerRedux?.infoHash}&filename=${playerRedux?.fileNameStream?.replace(/ /g, '%20')}` || '')
 
-        if (!offline.isMediaOffline) {
-            startSocketProgress()
-        }
+        startSocketProgress()
 
     }, [])
 
@@ -80,9 +106,9 @@ const Player: NextPage = () => {
         }
 
         setSocketIntervalId(setInterval(() => {
-            if (ws.readyState === WebSocket.OPEN && torrent.infoHash) {
+            if (ws.readyState === WebSocket.OPEN && playerRedux.infoHash) {
                 ws.send(JSON.stringify({
-                    infohash: torrent.infoHash,
+                    infohash: playerRedux.infoHash,
                 }));
             }
         }, 2000))
@@ -110,7 +136,7 @@ const Player: NextPage = () => {
             }
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
-                open={loadingGlobal.loading}
+                open={contextRedux.loading}
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
@@ -118,4 +144,4 @@ const Player: NextPage = () => {
     )
 }
 
-export default Player
+export default PlayerPage

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
 
 import videojs from 'video.js';
-import { setFilesSubtitleChoicedRedux } from "../../../redux/actions";
 import store, { useAppDispatch } from "../../../redux/store";
 import { downloadSubtitle } from "../../../services/subtitle";
 
@@ -13,6 +12,11 @@ import InfoStream from "../information/infoStream";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { postUserStream } from "../../../services/catalog";
+import { setFilesSubtitleChoicedReducer } from "../../../redux/actions";
+import { PlayerState } from "../../../redux/state/player";
+import { SubtitleState } from "../../../redux/state/subtitle";
+import { AuthState } from "../../../redux/state/auth";
+import { MediaState } from "../../../redux/state/media";
 
 interface Props {
     uri: string,
@@ -38,16 +42,17 @@ export default function DefaultPlayer(props: Props) {
     const [selectedAudio, setSelectedAudio] = useState('1')
     const [selectedSubtitle, setSelectedSubtitle] = useState('-1')
 
-    const playerRedux = useSelector((state: any) => state.player)
-    const subtitleRedux = useSelector((state: any) => state.subtitle)
+    const authRedux: AuthState = useSelector((state: any) => state.auth)
+    const mediaRedux: MediaState = useSelector((state: any) => state.media)
+    const playerRedux: PlayerState = useSelector((state: any) => state.player)
+    const subtitleRedux: SubtitleState = useSelector((state: any) => state.subtitle)
 
     useEffect(() => {
-        dispatch(setFilesSubtitleChoicedRedux([]))
+        dispatch(setFilesSubtitleChoicedReducer([]))
     }, [])
 
     useEffect(() => {
         if (videoNode) {
-
             const videoJsOptions = {
                 autoplay: true,
                 controls: false,
@@ -99,6 +104,10 @@ export default function DefaultPlayer(props: Props) {
             })
 
             setSelectedAudio('2')
+
+            if (playerRedux.watchedTill) {
+                handleSeek(Number(playerRedux.watchedTill) || 0)
+            }
         }
     }, [player])
 
@@ -193,13 +202,15 @@ export default function DefaultPlayer(props: Props) {
 
             for await (var fileSubtitle of subtitleRedux.filesSubtitleChoiced) {
                 try {
-                    const response = await downloadSubtitle(fileSubtitle.id, 'webvtt')
+                    if (fileSubtitle.id) {
+                        const response = await downloadSubtitle(fileSubtitle.id, 'webvtt')
 
-                    if (response.data) {
-                        remainingDownload = response.data.remaining
-                        player.addRemoteTextTrack({ src: response.data.link }, false);
+                        if (response.data) {
+                            remainingDownload = response.data.remaining
+                            player.addRemoteTextTrack({ src: response.data.link }, false);
 
-                        filesSubtitlesLoadedCount += 1
+                            filesSubtitlesLoadedCount += 1
+                        }
                     }
                 } catch (error) {
                     err = true
@@ -254,7 +265,21 @@ export default function DefaultPlayer(props: Props) {
     useEffect(() => {
 
         intervalUpdateUserStream = setInterval(
-            postUserStream({}), 60000
+            () => {
+                setTimePosition(
+                    (prevTimePosition) => {
+                        if (authRedux.userId && mediaRedux.mediaId && playerRedux.fileNameStream) {
+                            postUserStream({
+                                userId: Number(authRedux.userId),
+                                mediaId: Number(mediaRedux.mediaId),
+                                filename: playerRedux.fileNameStream,
+                                watchedTill: prevTimePosition
+                            }).catch((err) => console.log(err))
+                        }
+                        return prevTimePosition;
+                    }
+                )
+            }, 60000
         )
 
         return () => {

@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Backdrop, CircularProgress } from "@mui/material"
 import { GetServerSideProps, NextPage } from "next"
 import { unstable_getServerSession } from "next-auth/next"
@@ -7,14 +8,28 @@ import Background from "../../sections/downloaded/background"
 import TorrentsDownloadedList from "../../sections/downloaded/list"
 import { authOptions } from "../api/auth/[...nextauth]"
 
+import { hasCookie, getCookie } from 'cookies-next'
+import jwt_decode from 'jwt-decode'
+import { JwtDecodeUserToken } from "../../interfaces/jwt"
+import { useDispatch } from "react-redux"
+import { setUserIdReducer } from "../../redux/actions"
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const session = await unstable_getServerSession(context.req, context.res, authOptions)
 
-    if (session) {
-        return {
-            props: {}
-        }
+    if (session && hasCookie('user-token', { req: context.req })) {
+        try {
+            var jwt_decoded: JwtDecodeUserToken = jwt_decode(getCookie('user-token', { req: context.req })?.toString() || "")
+
+            if (jwt_decoded?.id) {
+                return {
+                    props: {
+                        userId: jwt_decoded.id
+                    }
+                }
+            }
+        } catch (e) { }
     }
 
     return {
@@ -25,7 +40,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-const DownloadedTorrent: NextPage = () => {
+interface DownloadedTorrentProps {
+    userId: number
+}
+
+const DownloadedTorrent: NextPage<DownloadedTorrentProps> = (props) => {
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setUserIdReducer(Number(props.userId)))
+    }, [])
 
     const loadingGlobal = useSelector((state: any) => state.loadingGlobal)
 

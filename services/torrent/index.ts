@@ -24,8 +24,7 @@ export const postTorrent = async (postTorrentRequest: PostTorrentRequest) => {
         for (var name of res.data.files.names) {
             if(isVideoFile(name)) {
                 const element = {
-                    name: name,
-                    uri: `${URL_API_STREAM}/torrent/stream?infohash=${infoHash}&filename=${name.replace(/ /g, '%20')}`
+                    name: name
                 }
                 infoFiles.push(element)
             }

@@ -38,3 +38,10 @@ export interface EpisodeCatalogResponse {
     episodeNumberRange: string;
     media: MediaCatalogResponse[];
 }
+
+export interface UserStreamWatchingResponse {
+    id: number;
+    watchedTill: number;
+    watchingMovie?: MovieCatalogResponse;
+    watchingSerie?: SerieCatalogResponse;
+}
