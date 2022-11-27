@@ -1,4 +1,4 @@
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, Box, CircularProgress } from "@mui/material";
 import { ToastContainer, toast } from 'react-toastify';
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux";
@@ -310,7 +310,7 @@ export default function DefaultPlayer(props: Props) {
             {
                 mouseMove &&
 
-                <div>
+                <Box>
                     <Backdrop sx={{ color: '#fff' }} open={true} />
 
                     <InfoStream
@@ -318,11 +318,11 @@ export default function DefaultPlayer(props: Props) {
                         progressDownload={props.progressDownload}
                     />
 
-                    <div 
-                        style={{ 
-                            position: 'fixed',
+                    <Box
+                        style={{
+                            position: 'absolute',
                             bottom: 20,
-                            width: '100%'
+                            width: '100vw'
                         }}
                     >
                         <ControlsPlayer
@@ -344,9 +344,9 @@ export default function DefaultPlayer(props: Props) {
                             mutedAudio={mutedAudio}
                             mutedAudioChange={mutedAudioChange}
                         />
-                    </div>
+                    </Box>
 
-                </div>
+                </Box>
             }
 
             <ToastContainer />

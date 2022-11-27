@@ -1,5 +1,5 @@
 import {
-  Button, Typography, Box, Avatar, Grid
+  Button, Typography, Box, Avatar, Grid, Stack
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -50,33 +50,36 @@ export default function SerieTitle() {
         display="flex"
         justifyContent="center"
         key={media.magnet}
+        sx={{ paddingLeft: 4, paddingRight: 4, paddingBottom: 4 }}
       >
+        <Stack direction="row" spacing={3}>
 
-        <Box sx={{ padding: 2 }}>
-          <Avatar
-            alt="Item"
-            src={serieChoicedRedux?.serie?.imagePath || ''}
-          />
-        </Box>
+          <Stack justifyContent="center">
+            <Avatar
+              alt="Item"
+              src={serieChoicedRedux?.serie?.imagePath || ''}
+            />
+          </Stack>
 
-        <Box sx={{ padding: 2 }}>
-          <Typography align='center' style={{ color: '#FFFFFF' }}>
-            {`Episódio ${episode.episodeNumberRange} - ${season.seasonNumber}ª Temporada` || ''}
-          </Typography>
-          <Typography align='center' style={{ color: 'gray' }}>
-            {`Idioma: ${media.type} - Resolução: ${media.resolution}` || ''}
-          </Typography>
-        </Box>
+          <Stack justifyContent="center">
+            <Typography align='center' style={{ fontSize: 25, color: '#FFFFFF' }}>
+              {`Episódio ${episode.episodeNumberRange || ''}`}
+            </Typography>
+            <Typography align='center' style={{ fontSize: 15, color: 'gray' }}>
+              {`Idioma: ${media.type || ''} - Resolução: ${media.resolution || ''}`}
+            </Typography>
+          </Stack>
 
-        <Box sx={{ padding: 2 }}>
-          <Button size="small" variant="contained" onClick={() => openFilesModal({
-            magnet: media.magnet,
-            media_id: Number(media.id)
-          })}>
-            Abrir arquivos
-          </Button>
-        </Box>
+          <Stack justifyContent="center">
+            <Button size="small" variant="contained" onClick={() => openFilesModal({
+              magnet: media.magnet,
+              media_id: Number(media.id)
+            })}>
+              Abrir arquivos
+            </Button>
+          </Stack>
 
+        </Stack>
       </Box>
     )
   }
@@ -91,32 +94,52 @@ export default function SerieTitle() {
 
       <Grid container>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} md={4}>
           <Box
             display="flex"
-            sx={{ flexDirection: 'column' }}
             justifyContent="center"
-            style={{ paddingBottom: 20 }}
           >
-            <img
-              width='120'
-              height='170'
-              src={serieChoicedRedux?.serie?.imagePath || ''}
-              style={{ alignSelf: 'center', paddingBottom: 10 }}>
-            </img>
+            <Stack justifyContent="center" spacing={3}>
 
-            <Typography align='center' sx={{ color: 'white' }} variant="h4" display="block" gutterBottom>
-              {serieChoicedRedux?.serie?.name || ''}
-            </Typography>
+              <img
+                width='120'
+                height='170'
+                src={serieChoicedRedux?.serie?.imagePath || ''}
+                style={{ alignSelf: 'center', paddingBottom: 10 }}>
+              </img>
 
+              <Stack justifyContent="center">
+
+                <Stack direction="row">
+                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
+                    Série:
+                  </Typography>
+
+                  <Typography align='center' sx={{ color: 'white' }} variant="h5" display="block" gutterBottom>
+                    {serieChoicedRedux?.serie?.name || ''}
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row">
+                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
+                    Temporada:
+                  </Typography>
+
+                  <Typography align='center' sx={{ color: 'white' }} variant="h5" display="block" gutterBottom>
+                    {`${serieChoicedRedux?.serie?.seasons[0]?.seasonNumber || ''}ª Temporada`}
+                  </Typography>
+                </Stack>
+
+              </Stack>
+            </Stack>
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} md={8}>
           {
             serieChoicedRedux?.serie?.seasons[0]?.episodes?.map((episode: any) =>
               episode?.media?.map((media: any) => {
-                if (serieChoicedRedux?.serie?.seasons[0]) 
+                if (serieChoicedRedux?.serie?.seasons[0])
                   return renderMediaItem(serieChoicedRedux?.serie?.seasons[0], episode, media)
               })
             )

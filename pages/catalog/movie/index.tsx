@@ -10,6 +10,8 @@ import Background from "../../../sections/catalog/background";
 import MovieTitle from "../../../sections/catalog/movie/title";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
+import Head from 'next/head';
+
 import { hasCookie, getCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
@@ -65,21 +67,28 @@ const MovieTitlePage: NextPage<MovieTitleProps> = (props) => {
     }, [])
 
     return (
-        <Background url={movieChoicedRedux?.movie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
-            <AppBarSimple />
+        <>
+            <Head>
+                <title>Playnt - Filme</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            
+            <Background url={movieChoicedRedux?.movie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
+                <AppBarSimple />
 
-            <div style={{ paddingTop: 100 }}>
-                <MovieTitle />
-            </div>
+                <div style={{ paddingTop: 100 }}>
+                    <MovieTitle />
+                </div>
 
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={contextRedux.loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={contextRedux.loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
 
-        </Background>
+            </Background>
+        </>
     )
 }
 

@@ -1,5 +1,5 @@
 import {
-  Button, Typography, Box, Avatar, Grid
+  Button, Typography, Box, Avatar, Grid, Stack
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -54,33 +54,36 @@ export default function MovieTitle() {
         display="flex"
         justifyContent="center"
         key={media.magnet}
+        sx={{ paddingLeft: 4, paddingRight: 4, paddingBottom: 4 }}
       >
+        <Stack direction="row" spacing={3}>
 
-        <Box sx={{ padding: 2 }}>
-          <Avatar
-            alt="Item"
-            src={movieChoicedRedux?.movie?.imagePath || ''}
-          />
-        </Box>
+          <Stack justifyContent="center">
+            <Avatar
+              alt="Item"
+              src={movieChoicedRedux?.movie?.imagePath || ''}
+            />
+          </Stack>
 
-        <Box sx={{ padding: 2 }}>
-          <Typography align='center' style={{ color: '#FFFFFF' }}>
-            {`Idioma: ${media.type}` || ''}
-          </Typography>
-          <Typography align='center' style={{ color: 'gray' }}>
-            {`Resolução: ${media.resolution}` || ''}
-          </Typography>
-        </Box>
+          <Stack justifyContent="center">
+            <Typography align='center' style={{ fontSize: 25, color: '#FFFFFF' }}>
+              {`Idioma: ${media.type || ''}`}
+            </Typography>
+            <Typography align='center' style={{ fontSize: 15, color: 'gray' }}>
+              {`Resolução: ${media.resolution || ''}`}
+            </Typography>
+          </Stack>
 
-        <Box sx={{ padding: 2 }}>
-          <Button size="small" variant="contained" onClick={() => openFilesModal({
-            magnet: media.magnet,
-            media_id: Number(media.id)
-          })}>
-            Abrir arquivos
-          </Button>
-        </Box>
+          <Stack justifyContent="center">
+            <Button size="small" variant="contained" onClick={() => openFilesModal({
+              magnet: media.magnet,
+              media_id: Number(media.id)
+            })}>
+              Abrir arquivos
+            </Button>
+          </Stack>
 
+        </Stack>
       </Box>
     )
   }
@@ -94,31 +97,39 @@ export default function MovieTitle() {
       />
 
       <Grid container spacing={3}>
-        <Grid item xs></Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} md={4}>
           <Box
             display="flex"
-            sx={{ flexDirection: 'column' }}
             justifyContent="center"
-            style={{ paddingBottom: 20 }}
           >
+            <Stack justifyContent="center" spacing={3}>
 
-            <img
-              width='120'
-              height='170'
-              src={movieChoicedRedux?.movie?.imagePath || ''}
-              style={{ alignSelf: 'center', paddingBottom: 10 }}>
-            </img>
+              <img
+                width='120'
+                height='170'
+                src={movieChoicedRedux?.movie?.imagePath || ''}
+                style={{ alignSelf: 'center', paddingBottom: 10 }}>
+              </img>
 
-            <Typography align='center' sx={{ color: 'white' }} variant="h4" display="block" gutterBottom>
-              {movieChoicedRedux?.movie?.name || ''}
-            </Typography>
+              <Stack justifyContent="center">
 
+                <Stack direction="row">
+                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
+                    Filme:
+                  </Typography>
+
+                  <Typography align='center' sx={{ color: 'white' }} variant="h5" display="block" gutterBottom>
+                    {movieChoicedRedux?.movie?.name || ''}
+                  </Typography>
+                </Stack>
+
+              </Stack>
+            </Stack>
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid item xs={12} md={8}>
           {movieChoicedRedux?.movie?.media?.map((media: any) => renderMediaItem(media))}
         </Grid>
       </Grid>

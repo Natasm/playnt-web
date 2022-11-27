@@ -3,7 +3,7 @@ import {
 	formatProgress
 } from '../utils/utils'
 
-import { Button, Container, Stack, Typography } from '@mui/material';
+import { Button, Box, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '../../../redux/store';
 import { resetMediaReducer, setRouteActionTriggeredReducer } from '../../../redux/actions';
@@ -47,40 +47,36 @@ export default function InfoStream(props: Props) {
 	}
 
 	return (
-		<Container sx={{ paddingTop: 4 }}>
+		<Box sx={{ padding: 4 }}>
 			<Stack direction="row" justifyContent="space-between">
-				
-				<Stack direction="column">
-					<Button
-						variant="contained"
-						sx={{ color: 'black', backgroundColor: 'white' }}
-						onClick={() => {
-							dispatch(setRouteActionTriggeredReducer("POP"))
-							router.back()
-						}}
-					>
-						Voltar
-					</Button>
-				</Stack>
 
-				<Stack direction="column">
-					<Typography textAlign="center" sx={{ color: 'white', zIndex: 0, fontSize: 12 }}>
-						Você está assistindo:
-					</Typography>
-					<Typography textAlign="center" sx={{ color: 'white', zIndex: 0, fontSize: 12 }}>
-						{`${playerRedux.fileNameStream || ""}`}
-					</Typography>
+				<Stack direction="row">
+					
+					<Stack direction="column" justifyContent="center">
+						<Button
+							variant="contained"
+							sx={{ color: 'black', backgroundColor: 'white' }}
+							onClick={() => {
+								dispatch(setRouteActionTriggeredReducer("POP"))
+								router.back()
+							}}
+						>
+							Voltar
+						</Button>
+					</Stack>
+
+					<Stack direction="column" style={{ paddingLeft: 10 }} justifyContent="center">
+						<Typography sx={{ color: 'white', zIndex: 0, fontSize: 20 }}>
+							Você está assistindo:
+						</Typography>
+						<Typography sx={{ color: 'gray', zIndex: 0, fontSize: 12 }}>
+							{`${playerRedux.fileNameStream || ""}`}
+						</Typography>
+					</Stack>
+
 				</Stack>
 
 				<Stack direction="column" textAlign="center" spacing={1}>
-
-					<Typography sx={{ color: 'white', zIndex: 0 }}>
-						{"Velocidade: " + formatBandWidth(props.speedDownload || 0)}
-					</Typography>
-
-					<Typography sx={{ color: 'white', zIndex: 0 }}>
-						{"Progresso: " + formatProgress(props.progressDownload || 0)}
-					</Typography>
 
 					{
 						playerRedux.titleType == PlayerTitleType.SERIE &&
@@ -93,9 +89,17 @@ export default function InfoStream(props: Props) {
 						</Button>
 					}
 
+					<Typography sx={{ color: 'gray', zIndex: 0 }}>
+						{"Velocidade: " + formatBandWidth(props.speedDownload || 0)}
+					</Typography>
+
+					<Typography sx={{ color: 'gray', zIndex: 0 }}>
+						{"Progresso: " + formatProgress(props.progressDownload || 0)}
+					</Typography>
+
 				</Stack>
 
 			</Stack >
-		</Container>
+		</Box>
 	);
 }

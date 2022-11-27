@@ -1,4 +1,4 @@
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography, Box } from "@mui/material";
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
@@ -37,7 +37,12 @@ export default function ControlsPlayer(props: Props) {
     const largeScreen = useMediaQuery(theme.breakpoints.up('sm'));
 
     return (
-        <Container sx={{ background: 'linear-gradient(to top, rgba(0,0,0,0,0.7),rgba(0,0,0,0,0.2))', }}>
+        <Box
+            sx={{
+                padding: 5,
+                background: 'linear-gradient(to top, rgba(0,0,0,0,0.7),rgba(0,0,0,0,0.2))',
+            }}
+        >
 
             <SeekBar
                 duration={props.duration}
@@ -73,6 +78,7 @@ export default function ControlsPlayer(props: Props) {
                 </Grid>
 
                 <Grid xs={9} item>
+
                     <AudioTracks
                         tracks={props.audioTracks}
                         selectedAudio={props.selectedAudio}
@@ -86,6 +92,7 @@ export default function ControlsPlayer(props: Props) {
                     />
 
                     <SubtitleDialog />
+
                 </Grid>
 
                 <Grid xs={2} item>
@@ -99,6 +106,6 @@ export default function ControlsPlayer(props: Props) {
                 </Grid>
 
             </Grid>
-        </Container >
+        </Box>
     )
 }

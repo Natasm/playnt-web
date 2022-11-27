@@ -10,6 +10,8 @@ import Background from "../../../sections/catalog/background";
 import SerieTitle from "../../../sections/catalog/serie/title";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
+import Head from 'next/head'
+
 import { hasCookie, getCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
@@ -65,21 +67,29 @@ const SerieTitlePage: NextPage<SerieTitleProps> = (props) => {
     }, [])
 
     return (
-        <Background url={serieChoicedRedux?.serie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
-            <AppBarMovieSimple />
+        <>
+            <Head>
+                <title>Playnt - Série</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            
+            <Background url={serieChoicedRedux?.serie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
 
-            <div style={{ paddingTop: 100 }}>
-                <SerieTitle />
-            </div>
+                <AppBarMovieSimple />
 
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={contextRedux.loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
+                <div style={{ paddingTop: 100 }}>
+                    <SerieTitle />
+                </div>
 
-        </Background>
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={contextRedux.loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+
+            </Background>
+        </>
     )
 }
 

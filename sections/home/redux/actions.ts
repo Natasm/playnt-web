@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import { setCacheReducer, setLoadingReducer } from "../../../redux/actions"
-import { deleteUserStream, getUserStreamWatching } from "../../../services/catalog"
+import { deleteUserStreamWatching } from "../../../services/catalog"
 import { deleteDirectoryOrFileListStream, getDirectoryOrFileListStream } from "../../../services/files"
 
 export const loadCacheAction = () => {
@@ -49,7 +49,7 @@ export const removeUserWatchingAction = (userStreamId: number) => {
         try {
             dispatch(setLoadingReducer(true))
 
-            const response = await deleteUserStream(userStreamId)
+            const response = await deleteUserStreamWatching(userStreamId)
 
             if (response?.data) {
                 return response.data

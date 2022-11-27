@@ -8,6 +8,8 @@ import { authOptions } from "../api/auth/[...nextauth]"
 import AppBarSimple from "../../sections/auth/signIn/appBarSimple"
 import { ContextState } from "../../redux/state/context"
 
+import Head from 'next/head'
+
 import { hasCookie, getCookie } from 'cookies-next'
 
 import jwt_decode from 'jwt-decode'
@@ -50,19 +52,26 @@ const SignInPage: NextPage = () => {
     const contextRedux: ContextState = useSelector((state: any) => state.context)
 
     return (
-        <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
-            
-            <AppBarSimple />
+        <>
+            <Head>
+                <title>Playnt - Autenticação</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
 
-            <FormLogin />
+            <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
 
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                open={contextRedux.loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        </Background>
+                <AppBarSimple />
+
+                <FormLogin />
+
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                    open={contextRedux.loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            </Background>
+        </>
     )
 }
 

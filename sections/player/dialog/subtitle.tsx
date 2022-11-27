@@ -99,7 +99,7 @@ export function SubtitleDialog() {
             <Button
                 size="small"
                 variant="contained"
-                sx={{ color: 'black', backgroundColor: 'white' }}
+                sx={{ color: 'black', marginLeft: 2, backgroundColor: 'white' }}
                 onClick={handleOpen}
             >
                 Pesquisar legenda

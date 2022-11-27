@@ -119,6 +119,6 @@ export const getUserStreamWatching = async (userId: number): Promise<UserStreamW
     return watchings;
 }
 
-export const deleteUserStream = async (userStreamId: number) => {
-    return await axios.delete(`${URL_API}/userStream`, { data: { userStreamId } })
+export const deleteUserStreamWatching = async (userStreamId: number) => {
+    return await axios.delete(`${URL_API}/userStream/watching`, { data: { userStreamId } })
 }

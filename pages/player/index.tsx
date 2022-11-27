@@ -9,6 +9,8 @@ import { PlayerState } from "../../redux/state/player";
 import DefaultPlayer from "../../sections/player/default";
 import { authOptions } from "../api/auth/[...nextauth]";
 
+import Head from 'next/head';
+
 import { hasCookie, getCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../interfaces/jwt";
@@ -126,21 +128,28 @@ const PlayerPage: NextPage<PlayerProps> = (props) => {
     }
 
     return (
-        <div onDoubleClick={toggleFullscreen}>
-            {
-                <DefaultPlayer
-                    uri={uri}
-                    speedDownload={speedDownload}
-                    progressDownload={progressDownload}
-                />
-            }
-            <Backdrop
-                sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
-                open={contextRedux.loading}
-            >
-                <CircularProgress color="inherit" />
-            </Backdrop>
-        </div>
+        <>
+            <Head>
+                <title>Playnt - Assistir</title>
+                <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+            </Head>
+            
+            <div onDoubleClick={toggleFullscreen}>
+                {
+                    <DefaultPlayer
+                        uri={uri}
+                        speedDownload={speedDownload}
+                        progressDownload={progressDownload}
+                    />
+                }
+                <Backdrop
+                    sx={{ color: '#fff', zIndex: (theme: any) => theme.zIndex.drawer + 1 }}
+                    open={contextRedux.loading}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+            </div>
+        </>
     )
 }
 

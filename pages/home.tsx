@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux';
 import { resetPlayerReducer, setUserIdReducer } from '../redux/actions';
 import ContinueWatching from '../sections/home/continue-watching';
 import FeaturedDescription from '../sections/home/featured-description';
+import Head from 'next/head';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -60,27 +61,34 @@ const HomePage: NextPage<HomeProps> = (props) => {
   }, [])
 
   return (
-    <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
+    <>
+      <Head>
+        <title>Playnt</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
+      
+      <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
 
-      <AppBarMain />
+        <AppBarMain />
 
-      <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 20 }}>
-        <FeaturedDescription />
-      </div>
+        <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 20 }}>
+          <FeaturedDescription />
+        </div>
 
-      <div>
-        <ContinueWatching userId={props.userId} />
-        <TrendingList />
-      </div>
+        <div>
+          <TrendingList />
+          <ContinueWatching userId={props.userId} />
+        </div>
 
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={contextRedux.loading}
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={contextRedux.loading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
 
-    </Background>
+      </Background>
+    </>
   );
 
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ImageList, ImageListItem } from '@mui/material';
+import { ImageList, ImageListItem, Stack } from '@mui/material';
 import { getMoviesByPopularityTheMovieDB } from '../../services/themoviedb';
 import { TheMovieDBMovieInfo } from '../../services/themoviedb/interface/themoviedb';
 import { Box, Typography } from '@material-ui/core';

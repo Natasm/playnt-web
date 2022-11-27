@@ -2,7 +2,7 @@ import { Typography, Box } from "@mui/material";
 
 export default function FeaturedDescription() {
     return (
-        <Box  sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1 }}>
             <p
                 style={{
                     fontWeight: 100,
@@ -29,15 +29,14 @@ export default function FeaturedDescription() {
 
             <p
                 style={{
-                    fontWeight: 100,
-                    maxWidth: '30vw',
-                    letterSpacing: '.1rem',
-                    fontSize: 18,
+                    maxWidth: '50vw',
+                    letterSpacing: '.05rem',
+                    fontSize: 20,
                     color: '#D5D3D3',
                     textDecoration: 'none',
                 }}
             >
-                Um dos melhores filmes da história do cinema. Assista aqui e agora!
+                
             </p>
         </Box>
     )
