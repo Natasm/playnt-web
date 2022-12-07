@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { ContextState } from "../../../redux/state/context";
 import { SerieChoicedState } from "../../../redux/state/serieChoiced";
 import AppBarMovieSimple from "../../../sections/catalog/appBarSimple";
-import Background from "../../../sections/catalog/background";
 import SerieTitle from "../../../sections/catalog/serie/title";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
@@ -17,6 +16,7 @@ import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
 import { useDispatch } from "react-redux";
 import { resetPlayerReducer, setUserIdReducer } from "../../../redux/actions";
+import Background from "../../../sections/catalog/serie/title/background";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 

@@ -101,7 +101,7 @@ export default function CatalogList() {
             try {
                 dispatch(resetMediaReducer())
 
-                dispatch(postMovieWebScraperAction(movie))
+                await dispatch(postMovieWebScraperAction(movie))
 
                 router.push('/catalog/movie')
 
@@ -142,7 +142,7 @@ export default function CatalogList() {
             try {
                 dispatch(resetMediaReducer())
 
-                dispatch(postSerieWebScraperAction(serie))
+                await dispatch(postSerieWebScraperAction(serie))
 
                 router.push('/catalog/serie')
 

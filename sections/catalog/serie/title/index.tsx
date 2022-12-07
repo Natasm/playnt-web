@@ -12,6 +12,8 @@ import { PostTorrentRequest } from '../../../../services/torrent/interface/torre
 import { postTorrentAction } from '../../redux/actions';
 import DialogSerieFiles from './dialog-files';
 
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+
 export default function SerieTitle() {
 
   const dispatch = useAppDispatch()
@@ -46,37 +48,64 @@ export default function SerieTitle() {
   const renderMediaItem = (season: SeasonCatalogResponse, episode: EpisodeCatalogResponse, media: MediaCatalogResponse) => {
 
     return (
+
       <Box
         display="flex"
         justifyContent="center"
         key={media.magnet}
         sx={{ paddingLeft: 4, paddingRight: 4, paddingBottom: 4 }}
       >
-        <Stack direction="row" spacing={3}>
+        <Stack direction="row" spacing={4}
+          sx={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 3, boxShadow: '0px 0px 15px rgba(255,255,255,0.2)' }}
+        >
 
-          <Stack justifyContent="center">
-            <Avatar
-              alt="Item"
-              src={serieChoicedRedux?.serie?.imagePath || ''}
-            />
-          </Stack>
+          <Stack direction="row" spacing={2}>
 
-          <Stack justifyContent="center">
-            <Typography align='center' style={{ fontSize: 25, color: '#FFFFFF' }}>
-              {`Episódio ${episode.episodeNumberRange || ''}`}
-            </Typography>
-            <Typography align='center' style={{ fontSize: 15, color: 'gray' }}>
-              {`Idioma: ${media.type || ''} - Resolução: ${media.resolution || ''}`}
-            </Typography>
-          </Stack>
+            <Box
+              onClick={() => openFilesModal({
+                magnet: media.magnet,
+                media_id: Number(media.id)
+              })}
+              sx={{
+                height: '120px',
+                width: '90px',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
+                backgroundRepeat: 'no-repeat',
+                backgroundImage: `url(${serieChoicedRedux?.serie?.imagePath})`
+              }}
+              color='black'
+            >
+              <Stack direction="row" justifyContent="center" style={{ paddingTop: 20 }}>
+                <PlayArrowIcon sx={{ color: 'white', fontSize: 80 }} />
+              </Stack>
+            </Box>
 
-          <Stack justifyContent="center">
-            <Button size="small" variant="contained" onClick={() => openFilesModal({
-              magnet: media.magnet,
-              media_id: Number(media.id)
-            })}>
-              Abrir arquivos
-            </Button>
+            <Stack spacing={1}>
+
+              <Stack direction="row" spacing={2}>
+                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, padding: 7 }}>Episódio</Typography>
+                <Typography textAlign="center" style={{ color: 'white', padding: 7 }}>
+                  {episode.episodeNumberRange || ''}
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" spacing={2}>
+                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, padding: 7 }}>Idioma</Typography>
+                <Typography textAlign="center" style={{ color: 'white', padding: 7 }}>
+                  {media.type || ''}
+                </Typography>
+              </Stack>
+
+              <Stack direction="row" spacing={2}>
+                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, padding: 7 }}>Resolução</Typography>
+                <Typography textAlign="center" style={{ color: 'white', padding: 7, fontWeight: 700 , backgroundColor: '#00315c', borderRadius: 20 }}>
+                  {media.resolution || ''}
+                </Typography>
+              </Stack>
+
+            </Stack>
+
           </Stack>
 
         </Stack>
@@ -92,35 +121,29 @@ export default function SerieTitle() {
         onClose={handleCloseModal}
       />
 
-      <Grid container>
+      <Grid container spacing={3}>
 
-        <Grid item xs={12} md={4}>
+        <Grid item xs={12}>
           <Box
             display="flex"
             justifyContent="center"
+            style={{ paddingBottom: 40 }}
           >
-            <Stack justifyContent="center" spacing={3}>
-
-              <img
-                width='120'
-                height='170'
-                src={serieChoicedRedux?.serie?.imagePath || ''}
-                style={{ alignSelf: 'center', paddingBottom: 10 }}>
-              </img>
+            <Stack justifyContent="center" direction="row" spacing={5}>
 
               <Stack justifyContent="center">
 
-                <Stack direction="row">
-                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
+                <Stack>
+                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1, fontSize: 15 }}>
                     Série:
                   </Typography>
 
-                  <Typography align='center' sx={{ color: 'white' }} variant="h5" display="block" gutterBottom>
+                  <Typography align='center' sx={{ color: 'white', fontSize: 50 }}>
                     {serieChoicedRedux?.serie?.name || ''}
                   </Typography>
                 </Stack>
 
-                <Stack direction="row">
+                <Stack justifyContent="center" direction="row">
                   <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
                     Temporada:
                   </Typography>
@@ -135,7 +158,7 @@ export default function SerieTitle() {
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12}>
           {
             serieChoicedRedux?.serie?.seasons[0]?.episodes?.map((episode: any) =>
               episode?.media?.map((media: any) => {

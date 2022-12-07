@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 import { ContextState } from "../../../redux/state/context";
 import { MovieChoicedState } from "../../../redux/state/movieChoiced";
 import AppBarSimple from "../../../sections/catalog/appBarSimple";
-import Background from "../../../sections/catalog/background";
 import MovieTitle from "../../../sections/catalog/movie/title";
 import { authOptions } from "../../api/auth/[...nextauth]";
 
@@ -17,6 +16,7 @@ import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
 import { useDispatch } from "react-redux";
 import { resetPlayerReducer, setUserIdReducer } from "../../../redux/actions";
+import Background from "../../../sections/catalog/movie/title/background";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -74,6 +74,7 @@ const MovieTitlePage: NextPage<MovieTitleProps> = (props) => {
             </Head>
             
             <Background url={movieChoicedRedux?.movie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
+                
                 <AppBarSimple />
 
                 <div style={{ paddingTop: 100 }}>

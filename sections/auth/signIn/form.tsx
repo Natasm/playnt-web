@@ -38,7 +38,7 @@ export function FormLogin() {
                 boxShadow: "1px 1px 50px #111"
             }}>
                 <form>
-                    <h1 style={{ color: 'gray'}}>Acesso</h1>
+                    <p style={{ color: 'gray', fontSize: 30, textAlign: 'center' }}>Acesso</p>
                     <TextField
                         style={{ paddingBottom: 20 }}
                         placeholder="Login"
