@@ -1,5 +1,5 @@
 import { Dispatch } from "redux"
-import { addPageCatalogReducer, addTitlesCatalogReducer, setInfoFilesFromMediaReducer, setInfoHashFromMediaReducer, setInfoHashPlayerReducer, setLoadingReducer, setMediaIdReducer, setTitlesCatalogReducer } from "../../../redux/actions"
+import { addPageCatalogReducer, addTitlesCatalogReducer, setHasMoreItemsCatalogReducer, setInfoFilesFromMediaReducer, setInfoHashFromMediaReducer, setInfoHashPlayerReducer, setLoadingReducer, setMediaIdReducer, setTitlesCatalogReducer } from "../../../redux/actions"
 import store from "../../../redux/store"
 import { getCatalogList, getCatalogListBySearch } from "../../../services/catalog"
 import { postTorrent } from "../../../services/torrent"
@@ -18,7 +18,14 @@ export const loadCatalogAction = (pushData: boolean = false) => {
                 var page = 1
             }
 
-            const response = await getCatalogList(page);
+            var catalogSource = store.getState().context.catalogSource
+
+            const response = await getCatalogList(page, catalogSource);
+
+            if (!response.data) {
+                dispatch(setHasMoreItemsCatalogReducer(false))
+                return
+            }
 
             if (pushData) {
                 dispatch(addTitlesCatalogReducer(response.data))
@@ -48,7 +55,14 @@ export const loadCatalogBySearchAction = (search: string, pushData: boolean = fa
                 var page = 1
             }
 
-            const response = await getCatalogListBySearch(search, page);
+            var catalogSource = store.getState().context.catalogSource
+
+            const response = await getCatalogListBySearch(search, page, catalogSource);
+
+            if (!response.data) {
+                dispatch(setHasMoreItemsCatalogReducer(false))
+                return
+            }
 
             if (pushData) {
                 dispatch(addTitlesCatalogReducer(response.data))

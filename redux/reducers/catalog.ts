@@ -20,6 +20,9 @@ export const catalogReducer = createSlice({
         addPageCatalogReducer: (state) => {
             return new CatalogState({ ...state, page: state.page + 1 })
         },
+        resetCatalogReducer: () => {
+            return new CatalogState({})
+        },
     }
 })
 

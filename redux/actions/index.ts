@@ -20,7 +20,8 @@ export const {
 export const { 
     setLoadingReducer, 
     setScrollTopPositionReducer, 
-    setSearchReducer, 
+    setSearchReducer,
+    setCatalogSourceReducer,
     setRouteActionTriggeredReducer 
 } = contextReducer.actions
 
@@ -29,15 +30,18 @@ export const {
     setPageCatalogReducer, 
     setHasMoreItemsCatalogReducer,
     addTitlesCatalogReducer,
-    addPageCatalogReducer 
+    addPageCatalogReducer,
+    resetCatalogReducer
 } = catalogReducer.actions
 
 export const { 
-    setMovieChoicedReducer 
+    setMovieChoicedReducer,
+    resetMovieChoicedReducer
 } = movieChoicedReducer.actions
 
 export const { 
-    setSerieChoicedReducer 
+    setSerieChoicedReducer,
+    resetSerieChoicedReducer
 } = serieChoicedReducer.actions
 
 export const { 

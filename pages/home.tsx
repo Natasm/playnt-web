@@ -71,7 +71,7 @@ const HomePage: NextPage<HomeProps> = (props) => {
 
         <AppBarMain />
 
-        <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 20 }}>
+        <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 100 }}>
           <FeaturedDescription />
         </div>
 

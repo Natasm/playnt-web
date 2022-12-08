@@ -7,7 +7,10 @@ export const serieChoicedReducer = createSlice({
     reducers: {
         setSerieChoicedReducer: (state, { payload }) => {
             return new SerieChoicedState({ ...state, serie: payload })
-        }
+        },
+        resetSerieChoicedReducer: () => {
+            return new SerieChoicedState({})
+        },
     }
 })
 

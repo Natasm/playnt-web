@@ -19,6 +19,9 @@ export const contextReducer = createSlice({
         },
         setRouteActionTriggeredReducer: (state, { payload }) => {
             return new ContextState({ ...state, routeActionTriggered: payload })
+        },
+        setCatalogSourceReducer: (state, { payload }) => {
+            return new ContextState({ ...state, catalogSource: payload })
         }
     }
 })

@@ -5,12 +5,12 @@ import { MovieWebScraper, SerieWebScraper } from './interface/webscraper.interfa
 
 const URL_API = process.env.NEXT_PUBLIC_URL_API
 
-export const getCatalogList = async (page: number) => {
-    return axios.get(`${URL_API}/catalog?page=${page}`)
+export const getCatalogList = async (page: number, catalogSource: number = 1) => {
+    return axios.get(`${URL_API}/catalog?page=${page}&catalogSource=${catalogSource}`)
 }
 
-export const getCatalogListBySearch = async (search: string, page: number) => {
-    return axios.get(`${URL_API}/catalog?search=${search}&page=${page}`)
+export const getCatalogListBySearch = async (search: string, page: number, catalogSource: number = 1) => {
+    return axios.get(`${URL_API}/catalog?search=${search}&page=${page}&catalogSource=${catalogSource}`)
 }
 
 export const postMovieWebscraper = async (movieWebScraper: MovieWebScraper) => {

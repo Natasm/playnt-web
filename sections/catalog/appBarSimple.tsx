@@ -1,3 +1,4 @@
+import { useTheme } from "@material-ui/core";
 import { AppBar, Button, Typography, Box, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
 import { setRouteActionTriggeredReducer } from "../../redux/actions";

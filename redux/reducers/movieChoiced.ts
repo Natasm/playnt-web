@@ -7,7 +7,10 @@ export const movieChoicedReducer = createSlice({
     reducers: {
         setMovieChoicedReducer: (state, { payload }) => {
             return new MovieChoicedState({ ...state, movie: payload })
-        }
+        },
+        resetMovieChoicedReducer: () => {
+            return new MovieChoicedState({})
+        },
     }
 })
 

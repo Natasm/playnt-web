@@ -1,10 +1,15 @@
-import { AppBar, Button, Toolbar, Typography, Box } from "@mui/material";
+import { useMediaQuery, useTheme } from "@material-ui/core";
+import { AppBar, Button, Toolbar, Typography, Box, Stack } from "@mui/material";
 import { useRouter } from 'next/router';
 import { setRouteActionTriggeredReducer } from "../../redux/actions";
 import { useAppDispatch } from "../../redux/store";
 import SearchField from "./search";
+import SelectCatalogSource from "./select-catalog-source";
 
 export default function AppBarCustom() {
+
+    const theme = useTheme()
+    const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
     const dispatch = useAppDispatch()
 
@@ -47,8 +52,15 @@ export default function AppBarCustom() {
                             Voltar
                         </Button>
                     </Box>
-                    
-                    <SearchField />
+
+                    <Stack
+                        justifyContent="center"
+                        direction={matchesUpMd ? "row" : "column"}
+                        style={{ width: '100vw', paddingTop: 20 }}
+                    >
+                        <SearchField />
+                        <SelectCatalogSource />
+                    </Stack>
 
                 </Toolbar>
             </AppBar>

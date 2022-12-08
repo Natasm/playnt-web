@@ -72,23 +72,23 @@ const MovieTitlePage: NextPage<MovieTitleProps> = (props) => {
                 <title>Playnt - Filme</title>
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            
+
             <Background url={movieChoicedRedux?.movie?.imagePath || "https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg"}>
-                
+
                 <AppBarSimple />
 
                 <div style={{ paddingTop: 100 }}>
                     <MovieTitle />
                 </div>
 
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={contextRedux.loading}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-
             </Background>
+
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={contextRedux.loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

@@ -2,26 +2,24 @@ import { useEffect } from 'react';
 import { Button, Card, CardActions, CardContent, CardMedia, ImageList, ImageListItem, Typography } from '@mui/material';
 import { useRouter } from 'next/router'
 import { useSelector } from 'react-redux';
-import store, { useAppDispatch } from '../../redux/store';
+import { useAppDispatch } from '../../redux/store';
 
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { MovieWebScraper, SerieWebScraper } from '../../services/catalog/interface/webscraper.interface';
-import { 
+import {
+    resetCatalogReducer,
     resetMediaReducer,
-    setHasMoreItemsCatalogReducer, 
-    setInfoFilesFromMediaReducer, 
-    setInfoHashFromMediaReducer, 
-    setPageCatalogReducer, 
-    setRouteActionTriggeredReducer, 
-    setScrollTopPositionReducer, 
-    setTitlesCatalogReducer 
+    setRouteActionTriggeredReducer,
+    setScrollTopPositionReducer
 } from '../../redux/actions';
 import { postMovieWebScraperAction } from './movie/redux/actions';
 import { postSerieWebScraperAction } from './serie/redux/actions';
 import { loadCatalogAction, loadCatalogBySearchAction } from './redux/actions';
 import { ContextState } from '../../redux/state/context';
 import { CatalogState } from '../../redux/state/catalog';
+
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default function CatalogList() {
 
@@ -30,60 +28,37 @@ export default function CatalogList() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('md'));
 
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
 
     const contextRedux: ContextState = useSelector((state: any) => state.context)
     const catalogRedux: CatalogState = useSelector((state: any) => state.catalog)
 
     useEffect(() => {
-        
+
         if (contextRedux.routeActionTriggered !== 'POP') {
-            dispatch(setTitlesCatalogReducer([]))
-            dispatch(setHasMoreItemsCatalogReducer(true))
-            
             dispatch(setScrollTopPositionReducer(0))
 
-            dispatch(setInfoHashFromMediaReducer(""))
-            dispatch(setInfoFilesFromMediaReducer([]))
+            dispatch(resetCatalogReducer())
+
+            dispatch(resetMediaReducer())
 
             dispatch(loadCatalogAction())
         }
 
-        const trackScrolling = () => {
-            if (document.documentElement.offsetHeight + document.documentElement.scrollTop === document.documentElement.scrollHeight) {
-                if (store.getState().context.loading) return
-                
-                if (store.getState().context.scrollTopPosition > document.documentElement.scrollHeight) return
-
-                if (contextRedux.search !== '') {
-                    dispatch(loadCatalogBySearchAction(contextRedux.search, true))
-                } else {
-                    dispatch(loadCatalogAction(true))
-                }
-            }
-        }
-
-        document.addEventListener('scroll', trackScrolling);
-
-        return () => {
-            document.removeEventListener('scroll', trackScrolling);
-        }
-
-        //eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        
+
         document.body.scrollTop = contextRedux.scrollTopPosition
         document.documentElement.scrollTop = contextRedux.scrollTopPosition
 
     }, [contextRedux.scrollTopPosition])
 
     useEffect(() => {
-        
+
         if (contextRedux.search !== '') {
-            dispatch(setTitlesCatalogReducer([]))
-            dispatch(setHasMoreItemsCatalogReducer(true))
+
+            dispatch(resetCatalogReducer())
 
             dispatch(loadCatalogBySearchAction(contextRedux.search))
         }
@@ -173,13 +148,37 @@ export default function CatalogList() {
     }
 
     return (
-        <ImageList cols={matches ? 6 : 2 } gap={8} sx={{ padding: 1 }}>
+
+        <InfiniteScroll
+            dataLength={catalogRedux.titles.length}
+            next={() => {
+                if (contextRedux.search !== '') {
+                    dispatch(loadCatalogBySearchAction(contextRedux.search, true))
+                } else {
+                    dispatch(loadCatalogAction(true))
+                }
+            }}
+            hasMore={catalogRedux.hasMoreItems}
+            scrollThreshold={0.97}
+            loader={<h4></h4>}
+        >
+            <ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
             {
                 catalogRedux.titles?.map((item: any) => {
                     if (item?.movie) return renderMovieItem(item.movie)
                     if (item?.serie) return renderSerieItem(item.serie)
                 })
             }
-        </ImageList>
+            </ImageList>
+
+            {/*<ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
+            {
+                catalogRedux.titles?.map((item: any) => {
+                    if (item?.movie) return renderMovieItem(item.movie)
+                    if (item?.serie) return renderSerieItem(item.serie)
+                })
+            }
+        </ImageList>*/}
+        </InfiniteScroll >
     )
 };

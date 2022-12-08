@@ -7,6 +7,7 @@ import { SessionProvider } from "next-auth/react"
 import store from "../redux/store"
 
 import './app.css'
+import '../styles/react-horizontal-scrolling-menu-custom.css'
 import '../styles/videojs.css'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps<{ session: Session}>) {

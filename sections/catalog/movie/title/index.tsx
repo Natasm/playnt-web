@@ -1,5 +1,5 @@
 import {
-  Button, Typography, Box, Avatar, Grid, Stack, List
+  Typography, Box, Grid, Stack
 } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -14,8 +14,12 @@ import { postTorrentAction } from '../../redux/actions';
 import DialogMovieFiles from './dialog-files';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { useMediaQuery, useTheme } from '@material-ui/core';
 
 export default function MovieTitle() {
+
+  const theme = useTheme()
+  const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   const dispatch = useAppDispatch()
 
@@ -56,13 +60,13 @@ export default function MovieTitle() {
         display="flex"
         justifyContent="center"
         key={media.magnet}
-        sx={{ paddingLeft: 4, paddingRight: 4, paddingBottom: 4 }}
+        sx={{ paddingBottom: 4 }}
       >
         <Stack direction="row" spacing={4}
-          sx={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 3, boxShadow: '0px 0px 15px rgba(255,255,255,0.2)' }}
+          sx={{ backgroundColor: 'rgba(255,255,255,0.05)', padding: 3, borderRadius: 7, boxShadow: '0px 0px 10px rgba(255,255,255,0.2)' }}
         >
 
-          <Stack direction="row" spacing={2}>
+          <Stack direction="row" spacing={3} style={{ padding: 10 }}>
 
             <Box
               onClick={() => openFilesModal({
@@ -84,18 +88,18 @@ export default function MovieTitle() {
               </Stack>
             </Box>
 
-            <Stack spacing={5}>
+            <Stack spacing={2} justifyContent="center">
 
-              <Stack direction="row" spacing={2}>
-                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, padding: 7 }}>Idioma</Typography>
-                <Typography textAlign="center" style={{ color: 'white', padding: 7 }}>
+              <Stack direction="row" spacing={1}>
+                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, paddingTop: 1 }}>Idioma:</Typography>
+                <Typography textAlign="center" style={{ color: 'white', fontWeight: 700 }}>
                   {media.type || ''}
                 </Typography>
               </Stack>
 
-              <Stack direction="row" spacing={2}>
-                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, padding: 7 }}>Resolução</Typography>
-                <Typography textAlign="center" style={{ color: 'white', padding: 7, fontWeight: 700 , backgroundColor: '#00315c', borderRadius: 20 }}>
+              <Stack direction="row" spacing={1}>
+                <Typography textAlign="center" style={{ color: 'gray', fontSize: 14, paddingTop: 8 }}>Resolução:</Typography>
+                <Typography textAlign="center" style={{ color: 'white', padding: 7, fontWeight: 700, backgroundColor: '#00315c', borderRadius: 20 }}>
                   {media.resolution || ''}
                 </Typography>
               </Stack>
@@ -117,20 +121,19 @@ export default function MovieTitle() {
         onClose={handleCloseModal}
       />
 
-      <Grid container spacing={3}>
+      <Grid container>
 
-        <Grid item xs={12}>
+        <Grid xs={12} sm={12} md={4}>
           <Box
             display="flex"
             justifyContent="center"
-            style={{ paddingBottom: 40 }}
           >
-            <Stack justifyContent="center" direction="row" spacing={5}>
+            <Stack position={ matchesUpMd ? "fixed": "relative" } justifyContent="center" direction="row" spacing={5}>
 
-              <Stack justifyContent="center">
+              <Stack justifyContent="center" style={{ padding: 50 }}>
 
                 <Stack>
-                  <Typography align='center' sx={{ color: 'gray', fontSize: 20 }}>
+                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1, fontSize: 15 }}>
                     Filme:
                   </Typography>
 
@@ -145,11 +148,16 @@ export default function MovieTitle() {
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid container xs={12} sm={12} md={8}>
           {
-            movieChoicedRedux?.movie?.media?.map((media: any) => renderMediaItem(media))
+            movieChoicedRedux?.movie?.media?.map((media: any) =>
+              <Grid key={media.magnet} xs={12} sm={12} md={12} style={{ paddingBottom: 20 }}>
+                {renderMediaItem(media)}
+              </Grid>
+            )
           }
         </Grid>
+        
       </Grid>
 
     </Box>
