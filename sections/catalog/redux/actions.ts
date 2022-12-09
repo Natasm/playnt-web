@@ -19,7 +19,7 @@ export const loadCatalogAction = (pushData: boolean = false) => {
             }
 
             var catalogSource = store.getState().context.catalogSource
-
+            
             const response = await getCatalogList(page, catalogSource);
 
             if (!response.data) {

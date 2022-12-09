@@ -20,6 +20,8 @@ import { ContextState } from '../../redux/state/context';
 import { CatalogState } from '../../redux/state/catalog';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Box, CircularProgress } from '@material-ui/core';
+import Stack from '@mui/material/Stack';
 
 export default function CatalogList() {
 
@@ -54,16 +56,13 @@ export default function CatalogList() {
 
     }, [contextRedux.scrollTopPosition])
 
-    useEffect(() => {
-
+    const loadCatalog = () => {
         if (contextRedux.search !== '') {
-
-            dispatch(resetCatalogReducer())
-
-            dispatch(loadCatalogBySearchAction(contextRedux.search))
+            dispatch(loadCatalogBySearchAction(contextRedux.search, true))
+        } else {
+            dispatch(loadCatalogAction(true))
         }
-
-    }, [contextRedux.search])
+    }
 
     const renderMovieItem = (movie: MovieWebScraper) => {
 
@@ -148,37 +147,30 @@ export default function CatalogList() {
     }
 
     return (
+        <>
+            <InfiniteScroll
+                dataLength={catalogRedux.titles.length}
+                next={loadCatalog}
+                hasMore={catalogRedux.hasMoreItems}
+                scrollThreshold={0.99}
+                loader={<div></div>}
+            >
+                <ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
+                    {
+                        catalogRedux.titles?.map((item: any) => {
+                            if (item?.movie) return renderMovieItem(item.movie)
+                            if (item?.serie) return renderSerieItem(item.serie)
+                        })
+                    }
+                </ImageList>
 
-        <InfiniteScroll
-            dataLength={catalogRedux.titles.length}
-            next={() => {
-                if (contextRedux.search !== '') {
-                    dispatch(loadCatalogBySearchAction(contextRedux.search, true))
-                } else {
-                    dispatch(loadCatalogAction(true))
+                {
+                    !contextRedux.loading &&
+                    <Stack justifyContent="center" padding={5} direction="row">
+                        <Button onClick={loadCatalog} sx={{ padding: 3, fontSize: 20 }} variant='contained'>Carregar mais</Button>
+                    </Stack>
                 }
-            }}
-            hasMore={catalogRedux.hasMoreItems}
-            scrollThreshold={0.97}
-            loader={<h4></h4>}
-        >
-            <ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
-            {
-                catalogRedux.titles?.map((item: any) => {
-                    if (item?.movie) return renderMovieItem(item.movie)
-                    if (item?.serie) return renderSerieItem(item.serie)
-                })
-            }
-            </ImageList>
-
-            {/*<ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
-            {
-                catalogRedux.titles?.map((item: any) => {
-                    if (item?.movie) return renderMovieItem(item.movie)
-                    if (item?.serie) return renderSerieItem(item.serie)
-                })
-            }
-        </ImageList>*/}
-        </InfiniteScroll >
+            </InfiniteScroll >
+        </>
     )
 };

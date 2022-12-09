@@ -1,25 +1,36 @@
-import { useEffect } from 'react';
 import { TextField } from "@mui/material";
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setSearchReducer } from "../../redux/actions";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { resetCatalogReducer, setSearchReducer } from "../../redux/actions";
+import { ContextState } from "../../redux/state/context";
+import { useAppDispatch } from "../../redux/store";
+import { loadCatalogBySearchAction } from "./redux/actions";
 
 export default function SearchField() {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     const [searchInput, setSearchInput] = useState("")
 
-    const [open, setOpen] = useState(false)
+    const contextRedux: ContextState = useSelector((state: any) => state.context)
 
     useEffect(() => {
-        return () => {
-            dispatch(setSearchReducer(''))
+        if (contextRedux.routeActionTriggered == 'POP') {
+            setSearchInput(contextRedux.search)
         }
-    }, [dispatch])
+    }, [])
+
+    useEffect(() => {
+
+        if (contextRedux.search !== '' && searchInput != '') {
+            dispatch(resetCatalogReducer())
+
+            dispatch(loadCatalogBySearchAction(contextRedux.search))
+        }
+
+    }, [contextRedux.search])
 
     const handleKeyUp = async (e: any) => {
-
         if (e.key === 'Enter' && searchInput !== '') {
             try {
                 dispatch(setSearchReducer(searchInput))
@@ -31,16 +42,13 @@ export default function SearchField() {
         setSearchInput(event.target.value)
     }
 
-    const onClose = () => {
-        setOpen(false)
-    }
-
     return (
         <TextField
             fullWidth
             placeholder="Pesquise o filme ou série"
             sx={{ paddingLeft: '20px', paddingRight: '20px', input: { color: 'white' } }}
             variant="standard"
+            value={searchInput}
             onChange={onChangeSearchInput}
             onKeyUp={handleKeyUp}
         />

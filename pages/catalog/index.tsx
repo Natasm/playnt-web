@@ -52,7 +52,7 @@ const CatalogPage: NextPage<CatalogProps> = (props) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        
+
         dispatch(setUserIdReducer(Number(props.userId)))
 
         dispatch(resetMovieChoicedReducer())
@@ -79,14 +79,14 @@ const CatalogPage: NextPage<CatalogProps> = (props) => {
                     <CatalogList />
                 </div>
 
-                <Backdrop
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                    open={contextRedux.loading}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-
             </Background>
+
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={contextRedux.loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

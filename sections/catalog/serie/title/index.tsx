@@ -127,7 +127,7 @@ export default function SerieTitle() {
 
       <Grid container>
 
-        <Grid xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={4}>
           <Box
             display="flex"
             justifyContent="center"
@@ -136,7 +136,7 @@ export default function SerieTitle() {
 
               <Stack justifyContent="center" style={{ padding: 50 }}>
 
-                <Stack>
+                <Stack style={{ paddingBottom: 30 }}>
                   <Typography align='center' sx={{ color: 'gray', paddingRight: 1, fontSize: 15 }}>
                     Série:
                   </Typography>
@@ -146,12 +146,12 @@ export default function SerieTitle() {
                   </Typography>
                 </Stack>
 
-                <Stack justifyContent="center" direction="row">
-                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1 }} variant="h6" display="block" gutterBottom>
+                <Stack>
+                  <Typography align='center' sx={{ color: 'gray' }}>
                     Temporada:
                   </Typography>
 
-                  <Typography align='center' sx={{ color: 'white' }} variant="h5" display="block" gutterBottom>
+                  <Typography align='center' sx={{ color: 'white', fontSize: 25 }}>
                     {`${serieChoicedRedux?.serie?.seasons[0]?.seasonNumber || ''}ª Temporada`}
                   </Typography>
                 </Stack>
@@ -161,13 +161,13 @@ export default function SerieTitle() {
           </Box>
         </Grid>
 
-        <Grid container xs={12} sm={12} md={8}> 
+        <Grid item xs={12} sm={12} md={8}> 
           {
             serieChoicedRedux?.serie?.seasons[0]?.episodes?.map((episode: any) =>
               episode?.media?.map((media: any) => {
                 if (serieChoicedRedux?.serie?.seasons[0])
                   return (
-                    <Grid key={media.magnet} xs={12} sm={12} md={12} style={{ paddingBottom: 20 }}>
+                    <Grid item key={media.magnet} xs={12} sm={12} md={12} style={{ paddingBottom: 20 }}>
                       {renderMediaItem(serieChoicedRedux?.serie?.seasons[0], episode, media)}
                     </Grid>
                   )

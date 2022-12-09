@@ -123,7 +123,7 @@ export default function MovieTitle() {
 
       <Grid container>
 
-        <Grid xs={12} sm={12} md={4}>
+        <Grid item xs={12} sm={12} md={4}>
           <Box
             display="flex"
             justifyContent="center"
@@ -133,7 +133,7 @@ export default function MovieTitle() {
               <Stack justifyContent="center" style={{ padding: 50 }}>
 
                 <Stack>
-                  <Typography align='center' sx={{ color: 'gray', paddingRight: 1, fontSize: 15 }}>
+                  <Typography align='center' sx={{ color: 'gray', fontSize: 15 }}>
                     Filme:
                   </Typography>
 
@@ -148,10 +148,10 @@ export default function MovieTitle() {
           </Box>
         </Grid>
 
-        <Grid container xs={12} sm={12} md={8}>
+        <Grid item xs={12} sm={12} md={8}>
           {
             movieChoicedRedux?.movie?.media?.map((media: any) =>
-              <Grid key={media.magnet} xs={12} sm={12} md={12} style={{ paddingBottom: 20 }}>
+              <Grid item key={media.magnet} xs={12} sm={12} md={12} style={{ paddingBottom: 20 }}>
                 {renderMediaItem(media)}
               </Grid>
             )
