@@ -96,7 +96,7 @@ export default function CatalogList() {
                 <Box
                     display="flex"
                     key={Math.random()}
-                    sx={{
+                    style={{
                         padding: 4,
                         height: '100%',
                         backgroundPosition: 'center',
@@ -155,7 +155,7 @@ export default function CatalogList() {
                 <Box
                     display="flex"
                     key={Math.random()}
-                    sx={{
+                    style={{
                         padding: 4,
                         height: '100%',
                         borderRadius: 5,

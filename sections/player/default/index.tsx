@@ -300,7 +300,7 @@ export default function DefaultPlayer(props: Props) {
         return () => {
             clearInterval(intervalUpdateUserStream)
         }
-    }, [])
+    }, [mediaChoicedRedux])
 
     return (
         <div>

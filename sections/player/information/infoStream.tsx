@@ -9,10 +9,7 @@ import { useAppDispatch } from '../../../redux/store';
 import { setRouteActionTriggeredReducer } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
 import { PlayerState } from '../../../redux/state/player';
-import { SerieChoicedState } from '../../../redux/state/serieChoiced';
-import { MediaChoicedState } from '../../../redux/state/mediaChoiced';
 import NextEpisodeButton from '../components/next-episode-button';
-import { MovieChoicedState } from '../../../redux/state/movieChoiced';
 
 import SpeedIcon from '@mui/icons-material/Speed';
 import DonutLargeIcon from '@mui/icons-material/DonutLarge';
@@ -27,10 +24,6 @@ export default function InfoStream(props: Props) {
 	const dispatch = useAppDispatch()
 
 	const playerRedux: PlayerState = useSelector((state: any) => state.player)
-
-	const mediaChoicedRedux: MediaChoicedState = useSelector((state: any) => state.mediaChoiced)
-	const movieChoicedRedux: MovieChoicedState = useSelector((state: any) => state.movieChoiced)
-	const serieChoicedRedux: SerieChoicedState = useSelector((state: any) => state.serieChoiced)
 
 	const router = useRouter()
 
@@ -66,8 +59,6 @@ export default function InfoStream(props: Props) {
 
 				<Stack direction="column" textAlign="center" spacing={1}>
 
-					<NextEpisodeButton />
-
 					<Stack direction="row" spacing={2} sx={{ zIndex: 0 }}>
 
 						<SpeedIcon sx={{ color: "white" }} />
@@ -87,6 +78,8 @@ export default function InfoStream(props: Props) {
 						</Typography>
 
 					</Stack>
+
+					<NextEpisodeButton />
 
 				</Stack>
 

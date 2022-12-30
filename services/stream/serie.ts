@@ -10,3 +10,10 @@ export const upsertSerie = async (upsertSerieRequest: UpsertSerieRequest): Promi
 
     return response.data
 }
+
+export const findSerie = async (id: number): Promise<SerieResponse> => {
+    
+    const response = await axios.post<SerieResponse>(`${API_STREAM_URL}/serie/find`, { id })
+
+    return response.data
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Card, CardActions, CardContent, CardMedia, ImageList, ImageListItem, Typography } from '@mui/material';
+import { Button, ImageList, Typography } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useRouter } from 'next/router'
 import { useAppDispatch } from '../../redux/store';
@@ -17,6 +17,7 @@ import { removeUserStreamAction } from './redux/actions';
 import { Stack } from '@mui/system';
 
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { getSerieAction } from '../catalog/serie/redux/actions';
 
 interface ContinueWatchingProps {
     userId: number
@@ -93,7 +94,7 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                     onClick={play}
                     display="flex"
                     key={Math.random()}
-                    sx={{
+                    style={{
                         padding: 4,
                         height: '100%',
                         backgroundPosition: 'center',
@@ -141,6 +142,8 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                     episodeNumber: episodeNumber
                 }
 
+                await dispatch(getSerieAction(Number(userStream?.episode?.season?.serie?.id)))
+
                 const response = await dispatch(loadTorrentAction(request))
 
                 dispatch(setWatchedTillPlayerReducer(userStream.watchedTill))
@@ -176,7 +179,7 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                     onClick={play}
                     display="flex"
                     key={Math.random()}
-                    sx={{
+                    style={{
                         padding: 4,
                         height: '100%',
                         backgroundPosition: 'center',

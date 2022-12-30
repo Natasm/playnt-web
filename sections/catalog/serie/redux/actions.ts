@@ -2,7 +2,7 @@ import { Dispatch } from "redux"
 import { setLoadingReducer, setSerieChoicedReducer } from "../../../../redux/actions"
 import { SerieCatalogResponse } from "../../../../services/catalog/interface/response.interface"
 import { EpisodeRequest, SeasonRequest, UpsertSerieRequest } from "../../../../services/stream/interface/request.interface"
-import { upsertSerie } from "../../../../services/stream/serie"
+import { findSerie, upsertSerie } from "../../../../services/stream/serie"
 
 export const postSerieAction = (serie: SerieCatalogResponse) => {
     return async function (dispatch: Dispatch) {
@@ -33,6 +33,24 @@ export const postSerieAction = (serie: SerieCatalogResponse) => {
             }
 
             var data = await upsertSerie(upsertSerieRequest)
+
+            dispatch(setSerieChoicedReducer(data))
+
+        } catch (e) {
+            console.log(e)
+        }
+        finally {
+            dispatch(setLoadingReducer(false))
+        }
+    }
+}
+
+export const getSerieAction = (id: number) => {
+    return async function (dispatch: Dispatch) {
+        try {
+            dispatch(setLoadingReducer(true))
+
+            var data = await findSerie(id)
 
             dispatch(setSerieChoicedReducer(data))
 
