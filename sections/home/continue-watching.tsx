@@ -6,14 +6,17 @@ import { useAppDispatch } from '../../redux/store';
 
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { getUserStreamWatching } from '../../services/catalog';
-import { UserStreamWatchingResponse } from '../../services/catalog/interface/response.interface';
 import { Box } from '@material-ui/core';
-import { setFileNameStreamPlayerReducer, setMovieChoicedReducer, setSerieChoicedReducer, setTitleTypePlayerReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
-import { PlayerTitleType } from '../../redux/state/player';
-import { postTorrentAction } from '../catalog/redux/actions';
 import DialogConfirmRemoveUserWatching from './dialog/confirm-remove-user-watching';
-import { removeUserWatchingAction } from './redux/actions';
+import { UserStreamResponse } from '../../services/stream/interface/response.interface';
+import { findAllUserStream } from '../../services/stream/user-stream';
+import { LoadTorrentRequest } from '../../services/stream/interface/request.interface';
+import { setEpisodeIdMediaChoicedReducer, setEpisodeMediaIdChoicedReducer, setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaIdChoicedReducer, setSeasonIdMediaChoicedReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
+import { loadTorrentAction } from '../catalog/redux/actions';
+import { removeUserStreamAction } from './redux/actions';
+import { Stack } from '@mui/system';
+
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 interface ContinueWatchingProps {
     userId: number
@@ -29,145 +32,190 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
     const dispatch = useAppDispatch()
 
     const [openModalDelete, setOpenModalDelete] = useState(false)
+
     const [userStreamIdToDelete, setUserStreamIdToDelete] = useState(0)
 
-    const [watchingList, setWatchingList] = useState<UserStreamWatchingResponse[]>([])
+    const [userStreamList, setUserStreamList] = useState<UserStreamResponse[]>([])
 
-    const getWatchingList = async () => {
-        const data = await getUserStreamWatching(Number(props.userId))
-        setWatchingList(data)
+    const getUserStreamList = async () => {
+        const data = await findAllUserStream(Number(props.userId))
+        setUserStreamList(data)
     }
 
     useEffect(() => {
-        getWatchingList()
+        getUserStreamList()
     }, [])
 
-    const renderMovieItem = (watching: UserStreamWatchingResponse) => {
+    const renderMovieItem = (userStream: UserStreamResponse) => {
 
-        const onPress = async () => {
+        const movieName = userStream?.movieMedia?.movie.name
+        const movieImagePath = userStream?.movieMedia?.movie.imagePath
+        const movieMedia = userStream?.movieMedia
 
-            if (watching?.watchingMovie?.media[0]?.id && watching?.watchingMovie?.media[0]?.magnet) {
+        const play = async () => {
 
-                dispatch(setMovieChoicedReducer(watching.watchingMovie))
+            if (movieMedia) {
 
-                dispatch(setTitleTypePlayerReducer(PlayerTitleType.MOVIE))
-                dispatch(setWatchedTillPlayerReducer(watching.watchedTill))
-                dispatch(setFileNameStreamPlayerReducer(watching.watchingMovie.media[0].files[0].name))
+                const request: LoadTorrentRequest = {
+                    magnet: movieMedia.magnet,
+                    movieMediaId: movieMedia.id
+                }
 
-                try {
-                    await dispatch(postTorrentAction({
-                        magnet: watching.watchingMovie?.media[0].magnet,
-                        media_id: Number(watching.watchingMovie?.media[0].id)
-                    }))
+                const response = await dispatch(loadTorrentAction(request))
 
-                    router.push('/player')
+                dispatch(setWatchedTillPlayerReducer(userStream.watchedTill))
 
-                } catch (error) { console.log(error) }
+                if (response) {
+                    dispatch(setMovieMediaIdChoicedReducer(movieMedia.id))
+
+                    dispatch(setInfoHashPlayerReducer(response.infoHash))
+                    dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+                    router.push("/player")
+                }
             }
+
         }
 
         return (
-            <ImageListItem key={Math.random()}>
+            <Stack sx={{ backgroundColor: 'black' }}>
 
                 <div style={{ textAlign: 'center', backgroundColor: 'black' }}>
                     <Button onClick={() => {
-                        setUserStreamIdToDelete(watching.id)
+                        setUserStreamIdToDelete(userStream.id)
                         setOpenModalDelete(true)
                     }} color="error">
                         <DeleteIcon />
                     </Button>
                 </div>
 
-                <Card sx={{ height: '100%' }}>
-                    <CardMedia
-                        component="img"
-                        image={watching?.watchingMovie?.imagePath || ''}
-                        alt=""
-                    />
-                    <CardContent>
-                        <Typography style={{ wordWrap: "break-word" }} gutterBottom variant="h6" component="div">
-                            {watching?.watchingMovie?.name || ''}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={onPress}>Escolho esse</Button>
-                    </CardActions>
-                </Card>
-            </ImageListItem>
+                <Box
+                    onClick={play}
+                    display="flex"
+                    key={Math.random()}
+                    sx={{
+                        padding: 4,
+                        height: '100%',
+                        backgroundPosition: 'center',
+                        borderRadius: 3,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage:
+                            `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
+                            `url(${movieImagePath || ""})`
+                    }}
+                    justifyContent="center"
+                >
+                    <PlayArrowIcon sx={{ color: 'white', paddingTop: 10, fontSize: 80 }} />
+                </Box>
+
+                <Stack>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 12 }}>
+                        Filme
+                    </Typography>
+                    <Typography textAlign="center" sx={{ color: 'white', fontSize: 22 }}>
+                        {movieName ? movieName : ""}
+                    </Typography>
+                </Stack>
+            </Stack>
         )
     }
 
-    const renderSerieItem = (watching: UserStreamWatchingResponse) => {
+    const renderSerieItem = (userStream: UserStreamResponse) => {
 
-        const onPress = async () => {
+        const serieName = userStream?.episode.season.serie.name
+        const season = userStream?.episode?.season
+        const seasonNumber = userStream?.episode.season.seasonNumber
+        const episode = userStream?.episode
+        const episodeNumber = userStream?.episode.episodeNumber
+        const episodeMedia = userStream?.episodeMedia
+        const serieImagePath = userStream?.episode.season.serie.imagePath
 
-            if (
-                watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.id &&
-                watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.magnet
-            ) {
+        const play = async () => {
 
-                dispatch(setSerieChoicedReducer(watching.watchingSerie))
+            if (episodeMedia && episodeNumber) {
 
-                dispatch(setTitleTypePlayerReducer(PlayerTitleType.SERIE))
-                dispatch(setWatchedTillPlayerReducer(watching.watchedTill))
-                dispatch(setFileNameStreamPlayerReducer(
-                    watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0].files[0].name
-                ))
+                const request: LoadTorrentRequest = {
+                    magnet: episodeMedia.magnet,
+                    episodeMediaId: episodeMedia.id,
+                    episodeNumber: episodeNumber
+                }
 
-                try {
-                    await dispatch(postTorrentAction({
-                        magnet: watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.magnet,
-                        media_id: Number(watching?.watchingSerie?.seasons[0]?.episodes[0]?.media[0]?.id)
-                    }))
+                const response = await dispatch(loadTorrentAction(request))
 
-                    router.push('/player')
+                dispatch(setWatchedTillPlayerReducer(userStream.watchedTill))
 
-                } catch (error) { console.log(error) }
+                if (response) {
+
+                    dispatch(setEpisodeMediaIdChoicedReducer(episodeMedia.id))
+                    dispatch(setEpisodeIdMediaChoicedReducer(episode.id))
+                    dispatch(setSeasonIdMediaChoicedReducer(season.id))
+
+                    dispatch(setInfoHashPlayerReducer(response.infoHash))
+                    dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+                    router.push("/player")
+                }
             }
+
         }
 
-
         return (
-            <ImageListItem key={Math.random()}>
-                <Card sx={{ height: '100%' }}>
+            <Stack sx={{ backgroundColor: 'black' }}>
 
-                    <div style={{ textAlign: 'center', backgroundColor: 'black' }}>
-                        <Button onClick={() => {
-                            setUserStreamIdToDelete(watching.id)
-                            setOpenModalDelete(true)
-                        }} color="error">
-                            <DeleteIcon />
-                        </Button>
-                    </div>
+                <div style={{ textAlign: 'center', backgroundColor: 'black' }}>
+                    <Button onClick={() => {
+                        setUserStreamIdToDelete(userStream.id)
+                        setOpenModalDelete(true)
+                    }} color="error">
+                        <DeleteIcon />
+                    </Button>
+                </div>
 
-                    <CardMedia
-                        component="img"
-                        image={watching?.watchingSerie?.imagePath || ''}
-                        alt=""
-                    />
-                    <CardContent>
-                        <Typography style={{ wordWrap: "break-word" }} gutterBottom variant="h6" component="div">
-                            {`${watching?.watchingSerie?.name} - ${watching.watchingSerie?.seasons[0].seasonNumber || 0}ª Temporada` || ''}
-                        </Typography>
+                <Box
+                    onClick={play}
+                    display="flex"
+                    key={Math.random()}
+                    sx={{
+                        padding: 4,
+                        height: '100%',
+                        backgroundPosition: 'center',
+                        borderRadius: 3,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage:
+                            `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
+                            `url(${serieImagePath || ""})`
+                    }}
+                    justifyContent="center"
+                >
+                    <PlayArrowIcon sx={{ color: 'white', paddingTop: 10, fontSize: 80 }} />
+                </Box>
 
-                        <Typography style={{ wordWrap: "break-word", color: 'gray' }} gutterBottom variant="h6" component="div">
-                            {`Episódio: ${watching.watchingSerie?.seasons[0].episodes[0].episodeNumberRange}` || ''}
-                        </Typography>
+                <Stack>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 15 }}>
+                        {serieName || ""}
+                    </Typography>
 
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={onPress}>Escolho esse</Button>
-                    </CardActions>
-                </Card>
-            </ImageListItem>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 12 }}>
+                        {seasonNumber ? `${seasonNumber}ª Temporada` : ""}
+                    </Typography>
+
+                    <Typography textAlign="center" sx={{ color: 'white', fontSize: 22 }}>
+                        {episodeNumber ? `Episódio ${episodeNumber}` : ""}
+                    </Typography>
+                </Stack>
+            </Stack>
         )
+
     }
 
-    const removeWatching = async () => {
-        const response = await dispatch(removeUserWatchingAction(Number(userStreamIdToDelete)))
-    
+    const removeUserStream = async () => {
+
+        const response = await dispatch(removeUserStreamAction(Number(userStreamIdToDelete)))
+
         if (response) {
-            getWatchingList()
+            getUserStreamList()
         }
 
         setOpenModalDelete(false)
@@ -179,11 +227,11 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
             <DialogConfirmRemoveUserWatching
                 open={openModalDelete}
                 onClose={() => setOpenModalDelete(false)}
-                onAction={removeWatching}
+                onAction={removeUserStream}
             />
 
             {
-                watchingList?.length > 0 &&
+                userStreamList?.length > 0 &&
                 <h2
                     style={{
                         fontWeight: 200,
@@ -198,9 +246,9 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
             <ImageList cols={matches ? 6 : 2} gap={8}>
                 {
-                    watchingList?.map((item: UserStreamWatchingResponse) => {
-                        if (item?.watchingMovie) return renderMovieItem(item)
-                        if (item?.watchingSerie) return renderSerieItem(item)
+                    userStreamList?.map((item: UserStreamResponse) => {
+                        if (item?.movieMedia) return renderMovieItem(item)
+                        if (item?.episodeMedia) return renderSerieItem(item)
                     })
                 }
             </ImageList>

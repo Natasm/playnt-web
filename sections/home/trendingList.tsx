@@ -1,7 +1,5 @@
 import { useEffect, useState, useContext } from 'react';
-import { getMoviesByPopularityTheMovieDB } from '../../services/themoviedb';
-import { TheMovieDBMovieInfo } from '../../services/themoviedb/interface/themoviedb';
-import { Box, Typography } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 
 import { Stack } from '@mui/material';
 
@@ -9,12 +7,13 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
+import { MoviePopularityResponse } from '../../services/catalog/interface/response.interface';
 
-const URL_IMAGES_THEMOVIEDB = process.env.NEXT_PUBLIC_URL_IMAGES_THEMOVIEDB
+import { getMoviesByPopularity } from '../../services/catalog/titles';
 
 export default function TrendingList() {
 
-    const [data, setData] = useState<TheMovieDBMovieInfo[]>([])
+    const [data, setData] = useState<MoviePopularityResponse[]>([])
 
     useEffect(() => {
         loadData()
@@ -22,7 +21,7 @@ export default function TrendingList() {
 
     const loadData = async () => {
         try {
-            const response = await getMoviesByPopularityTheMovieDB()
+            const response = await getMoviesByPopularity()
 
             if (response?.data?.results) {
                 setData(response.data.results)
@@ -33,14 +32,14 @@ export default function TrendingList() {
     }
 
     const renderItem = (posterPath: string) => {
-        var sourceImage = `${URL_IMAGES_THEMOVIEDB}${posterPath}`
 
         return (
             <img
+                key={posterPath + Math.random()}
                 width='200px'
                 height='300px'
-                src={`${sourceImage}?w=164&h=164&fit=crop&auto=format`}
-                srcSet={`${sourceImage}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+                src={`${posterPath}?w=164&h=164&fit=crop&auto=format`}
+                srcSet={`${posterPath}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                 alt={""}
                 loading="lazy"
             />
@@ -53,7 +52,7 @@ export default function TrendingList() {
         return (
             <Stack
                 justifyContent="center"
-                style={{
+                sx={{
                     color: 'white',
                     display: isFirstItemVisible ? 'none' : '',
                     backgroundColor: 'rgba(0,0,0,0.4)'
@@ -71,7 +70,7 @@ export default function TrendingList() {
         return (
             <Stack
                 justifyContent="center"
-                style={{
+                sx={{
                     color: 'white',
                     display: isLastItemVisible ? 'none' : '',
                     backgroundColor: 'rgba(0,0,0,0.4)'
@@ -104,7 +103,7 @@ export default function TrendingList() {
                 RightArrow={RightArrow}
             >
                 {
-                    data.map((item: TheMovieDBMovieInfo) => renderItem(item.poster_path))
+                    data.map((item: MoviePopularityResponse) => renderItem(item.poster_path))
                 }
             </ScrollMenu>
         </Box>

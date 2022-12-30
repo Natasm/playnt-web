@@ -8,6 +8,9 @@ export const movieChoicedReducer = createSlice({
         setMovieChoicedReducer: (state, { payload }) => {
             return new MovieChoicedState({ ...state, movie: payload })
         },
+        setTMDBMovieChoicedReducer: (state, { payload }) => {
+            return new MovieChoicedState({ ...state, tmdb: payload })
+        },
         resetMovieChoicedReducer: () => {
             return new MovieChoicedState({})
         },

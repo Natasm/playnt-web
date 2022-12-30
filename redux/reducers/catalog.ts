@@ -11,8 +11,8 @@ export const catalogReducer = createSlice({
         setPageCatalogReducer: (state, { payload }) => {
             return new CatalogState({ ...state, page: payload })
         },
-        setHasMoreItemsCatalogReducer: (state, { payload }) => {
-            return new CatalogState({ ...state, hasMoreItems: payload})
+        setHasMoreTitlesCatalogReducer: (state, { payload }) => {
+            return new CatalogState({ ...state, hasMoreTitles: payload })
         },
         addTitlesCatalogReducer: (state, { payload }) => {
             return new CatalogState({ ...state, titles: state.titles.concat(payload) })

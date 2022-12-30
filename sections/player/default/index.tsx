@@ -5,18 +5,19 @@ import { useSelector } from "react-redux";
 
 import videojs from 'video.js';
 import store, { useAppDispatch } from "../../../redux/store";
-import { downloadSubtitle } from "../../../services/subtitle";
+import { downloadSubtitle } from "../../../services/catalog/subtitle";
 
 import ControlsPlayer from "../controls";
 import InfoStream from "../information/infoStream";
 
 import 'react-toastify/dist/ReactToastify.css';
-import { postUserStream } from "../../../services/catalog";
+
 import { setFilesSubtitleChoicedReducer } from "../../../redux/actions";
 import { PlayerState } from "../../../redux/state/player";
 import { SubtitleState } from "../../../redux/state/subtitle";
 import { AuthState } from "../../../redux/state/auth";
-import { MediaState } from "../../../redux/state/media";
+import { MediaChoicedState } from "../../../redux/state/mediaChoiced";
+import { upsertUserStream } from "../../../services/stream/user-stream";
 
 interface Props {
     uri: string,
@@ -43,7 +44,7 @@ export default function DefaultPlayer(props: Props) {
     const [selectedSubtitle, setSelectedSubtitle] = useState('-1')
 
     const authRedux: AuthState = useSelector((state: any) => state.auth)
-    const mediaRedux: MediaState = useSelector((state: any) => state.media)
+    const mediaChoicedRedux: MediaChoicedState = useSelector((state: any) => state.mediaChoiced)
     const playerRedux: PlayerState = useSelector((state: any) => state.player)
     const subtitleRedux: SubtitleState = useSelector((state: any) => state.subtitle)
 
@@ -231,7 +232,7 @@ export default function DefaultPlayer(props: Props) {
     }, [subtitleRedux.filesSubtitleChoiced, player])
 
     useEffect(() => {
-        if (!playerRedux.permissionToHideControls) {
+        if (videoNode && !playerRedux.permissionToHideControls) {
             setPause(true)
             videoNode?.pause()
         }
@@ -268,13 +269,27 @@ export default function DefaultPlayer(props: Props) {
             () => {
                 setTimePosition(
                     (prevTimePosition) => {
-                        if (authRedux.userId && mediaRedux.mediaId && playerRedux.fileNameStream) {
-                            postUserStream({
-                                userId: Number(authRedux.userId),
-                                mediaId: Number(mediaRedux.mediaId),
-                                filename: playerRedux.fileNameStream,
-                                watchedTill: prevTimePosition
-                            }).catch((err) => console.log(err))
+                        if (authRedux.userId) {
+
+                            if (mediaChoicedRedux?.movieMediaId) {
+                                
+                                upsertUserStream({
+                                    userId: Number(authRedux.userId),
+                                    movieMediaId: Number(mediaChoicedRedux?.movieMediaId),
+                                    watchedTill: prevTimePosition
+                                }).catch((err) => console.log(err))
+
+                            } else if (mediaChoicedRedux.episodeMediaId && mediaChoicedRedux.episodeId && mediaChoicedRedux.seasonId){
+                                
+                                upsertUserStream({
+                                    userId: Number(authRedux.userId),
+                                    episodeMediaId: Number(mediaChoicedRedux?.episodeMediaId),
+                                    episodeId: Number(mediaChoicedRedux.episodeId),
+                                    seasonId: Number(mediaChoicedRedux.seasonId),
+                                    watchedTill: prevTimePosition
+                                }).catch((err) => console.log(err))
+
+                            }
                         }
                         return prevTimePosition;
                     }

@@ -1,18 +1,14 @@
+export interface MoviePopularityResponse {
+    poster_path: string
+}
+
 export interface MediaCatalogResponse {
-    id: number;
     magnet: string;
     type: string;
     resolution: string;
-    files: FileCatalogResponse[];
-}
-
-export interface FileCatalogResponse {
-    id: number;
-    name: string;
 }
 
 export interface MovieCatalogResponse {
-    id: number;
     name: string;
     imagePath: string;
     imdb: string;
@@ -20,7 +16,6 @@ export interface MovieCatalogResponse {
 }
 
 export interface SerieCatalogResponse {
-    id: number;
     name: string;
     imagePath: string;
     imdb: string;
@@ -28,20 +23,58 @@ export interface SerieCatalogResponse {
 }
 
 export interface SeasonCatalogResponse {
-    id: number;
     seasonNumber: number;
     episodes: EpisodeCatalogResponse[];
 }
 
-export interface EpisodeCatalogResponse {
-    id: number;
-    episodeNumberRange: string;
+export interface EpisodeCatalogResponse{
+    episodeNumber: number;
     media: MediaCatalogResponse[];
 }
 
-export interface UserStreamWatchingResponse {
-    id: number;
-    watchedTill: number;
-    watchingMovie?: MovieCatalogResponse;
-    watchingSerie?: SerieCatalogResponse;
+export interface MovieSerieCatalogResponse {
+    movie?: MovieCatalogResponse
+    serie?: SerieCatalogResponse
+}
+
+export interface TMDBMovieResultsResponseDto {
+    adult: boolean
+    backdrop_path: string
+    title: string
+    original_title: string
+    overview: string
+    poster_path: string
+    vote_average: number
+}
+
+export interface TMDBTvResultsResponseDto {
+    adult: boolean
+    backdrop_path: string
+    name: string
+    original_name: string
+    overview: string
+    poster_path: string
+    vote_average: number
+}
+
+export interface TMDBEpisodeResponseDto {
+    episode_number: number 
+    name: string,
+    overview: string,
+    still_path: string
+}
+
+export interface TMDBFindResponseDto {
+    movie_results: TMDBMovieResultsResponseDto[]
+    tv_results: TMDBTvResultsResponseDto[]
+    episodes: TMDBEpisodeResponseDto[]
+}
+
+export interface TMDBMoviePopularityDto {
+    poster_path: string
+}
+
+export interface TMDBMoviePopularityResponseDto {
+    page: number,
+    results: TMDBMoviePopularityDto[]
 }

@@ -1,13 +1,21 @@
 import { Dispatch } from "redux"
-import { addPageCatalogReducer, addTitlesCatalogReducer, setHasMoreItemsCatalogReducer, setInfoFilesFromMediaReducer, setInfoHashFromMediaReducer, setInfoHashPlayerReducer, setLoadingReducer, setMediaIdReducer, setTitlesCatalogReducer } from "../../../redux/actions"
+import {
+    addPageCatalogReducer, addTitlesCatalogReducer,
+    setHasMoreTitlesCatalogReducer,
+    setLoadingReducer, setTitlesCatalogReducer
+} from "../../../redux/actions"
 import store from "../../../redux/store"
-import { getCatalogList, getCatalogListBySearch } from "../../../services/catalog"
-import { postTorrent } from "../../../services/torrent"
-import { PostTorrentRequest } from "../../../services/torrent/interface/torrent"
+import { getCatalogList, getCatalogListBySearch } from "../../../services/catalog/titles"
+import { LoadTorrentRequest } from "../../../services/stream/interface/request.interface"
+import { LoadTorrentResponse } from "../../../services/stream/interface/response.interface"
+import { loadTorrent } from "../../../services/stream/torrent"
 
 export const loadCatalogAction = (pushData: boolean = false) => {
     return async function (dispatch: Dispatch) {
         try {
+
+            if (store.getState().context.loading) return
+
             dispatch(setLoadingReducer(true))
 
             if (pushData) {
@@ -19,18 +27,20 @@ export const loadCatalogAction = (pushData: boolean = false) => {
             }
 
             var catalogSource = store.getState().context.catalogSource
-            
-            const response = await getCatalogList(page, catalogSource);
 
-            if (!response.data) {
-                dispatch(setHasMoreItemsCatalogReducer(false))
-                return
-            }
+            const data = await getCatalogList(page, catalogSource);
 
-            if (pushData) {
-                dispatch(addTitlesCatalogReducer(response.data))
+            if (data.length == 0) {
+                dispatch(setHasMoreTitlesCatalogReducer(false))
             } else {
-                dispatch(setTitlesCatalogReducer(response.data))
+
+                dispatch(setHasMoreTitlesCatalogReducer(true))
+
+                if (pushData) {
+                    dispatch(addTitlesCatalogReducer(data))
+                } else {
+                    dispatch(setTitlesCatalogReducer(data))
+                }
             }
 
         } catch (e) {
@@ -45,6 +55,9 @@ export const loadCatalogAction = (pushData: boolean = false) => {
 export const loadCatalogBySearchAction = (search: string, pushData: boolean = false) => {
     return async function (dispatch: Dispatch) {
         try {
+
+            if (store.getState().context.loading) return
+            
             dispatch(setLoadingReducer(true))
 
             if (pushData) {
@@ -57,17 +70,19 @@ export const loadCatalogBySearchAction = (search: string, pushData: boolean = fa
 
             var catalogSource = store.getState().context.catalogSource
 
-            const response = await getCatalogListBySearch(search, page, catalogSource);
+            const data = await getCatalogListBySearch(search, page, catalogSource);
 
-            if (!response.data) {
-                dispatch(setHasMoreItemsCatalogReducer(false))
-                return
-            }
-
-            if (pushData) {
-                dispatch(addTitlesCatalogReducer(response.data))
+            if (data.length == 0) {
+                dispatch(setHasMoreTitlesCatalogReducer(false))
             } else {
-                dispatch(setTitlesCatalogReducer(response.data))
+                
+                dispatch(setHasMoreTitlesCatalogReducer(true))
+                
+                if (pushData) {
+                    dispatch(addTitlesCatalogReducer(data))
+                } else {
+                    dispatch(setTitlesCatalogReducer(data))
+                }
             }
 
         } catch (e) {
@@ -79,20 +94,14 @@ export const loadCatalogBySearchAction = (search: string, pushData: boolean = fa
     }
 }
 
-export const postTorrentAction = (postTorrentRequest: PostTorrentRequest) => {
-    return async function (dispatch: Dispatch) {
+export const loadTorrentAction = (loadTorrentRequest: LoadTorrentRequest) => {
+    return async function (dispatch: Dispatch): Promise<LoadTorrentResponse | undefined> {
         try {
             dispatch(setLoadingReducer(true))
 
-            const response = await postTorrent(postTorrentRequest)
+            const response = await loadTorrent(loadTorrentRequest)
 
-            if (response?.infoFiles && response.infoHash) {
-                dispatch(setMediaIdReducer(postTorrentRequest.media_id))
-                dispatch(setInfoHashFromMediaReducer(response.infoHash))
-                dispatch(setInfoFilesFromMediaReducer(response.infoFiles))
-
-                dispatch(setInfoHashPlayerReducer(response.infoHash))
-            }
+            return response
 
         } catch (e) { console.log(e) }
         finally {

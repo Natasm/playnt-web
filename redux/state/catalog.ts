@@ -1,17 +1,19 @@
+import { MovieSerieCatalogResponse } from "../../services/catalog/interface/response.interface"
+
 interface CatalogStateInterface {
-    titles?: any[],
+    titles?: MovieSerieCatalogResponse[]
     page?: number
-    hasMoreItems?: boolean
+    hasMoreTitles?: boolean
 }
 
 export class CatalogState {
-    titles: any[]
+    titles: MovieSerieCatalogResponse[]
     page: number
-    hasMoreItems: boolean
+    hasMoreTitles: boolean
 
     constructor(catalog: CatalogStateInterface) {
         this.titles = catalog.titles || []
         this.page = catalog.page || 1
-        this.hasMoreItems = catalog.hasMoreItems || true
+        this.hasMoreTitles = catalog.hasMoreTitles ? true : false
     }
 }

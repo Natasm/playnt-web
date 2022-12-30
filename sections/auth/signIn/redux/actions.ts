@@ -7,11 +7,12 @@ import { login as loginService } from "../../../../services/auth"
 export const loginAction = (login: string, password: string) => {
     return async function (dispatch: Dispatch) {
         try {
+            
             dispatch(setLoadingReducer(true))
 
             const response = await loginService(login, password)
 
-            if (response?.data?.token && response?.data?.userId) {
+            if (response?.data?.token && response?.data?.customerId) {
 
                 setCookie('user-token', response.data.token)
 

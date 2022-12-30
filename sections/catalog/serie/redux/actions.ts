@@ -1,18 +1,40 @@
 import { Dispatch } from "redux"
 import { setLoadingReducer, setSerieChoicedReducer } from "../../../../redux/actions"
-import { findSerie, postSerieWebscraper } from "../../../../services/catalog"
-import { SerieWebScraper } from "../../../../services/catalog/interface/webscraper.interface"
+import { SerieCatalogResponse } from "../../../../services/catalog/interface/response.interface"
+import { EpisodeRequest, SeasonRequest, UpsertSerieRequest } from "../../../../services/stream/interface/request.interface"
+import { upsertSerie } from "../../../../services/stream/serie"
 
-export const postSerieWebScraperAction = (serie: SerieWebScraper) => {
+export const postSerieAction = (serie: SerieCatalogResponse) => {
     return async function (dispatch: Dispatch) {
         try {
             dispatch(setLoadingReducer(true))
 
-            var serieResponse = await postSerieWebscraper(serie)
+            var upsertSerieRequest: UpsertSerieRequest = {
+                serie: {
+                    ...serie,
+                    seasons: serie.seasons.map((season) => {
+                        
+                        var seasonRequest: SeasonRequest = {
+                            
+                            seasonNumber: season.seasonNumber,
+                            episodes: season.episodes.map((episode) => {
+                                
+                                var episodeRequest: EpisodeRequest = {
+                                    episodeNumber: episode.episodeNumber,
+                                    media: episode.media
+                                }
 
-            var serieFound = await findSerie({ id: serieResponse.data.id, season: serie.seasons[0].seasonNumber })
+                                return episodeRequest
+                            })
+                        }
+                        return seasonRequest
+                    })
+                }
+            }
 
-            dispatch(setSerieChoicedReducer(serieFound.data))
+            var data = await upsertSerie(upsertSerieRequest)
+
+            dispatch(setSerieChoicedReducer(data))
 
         } catch (e) {
             console.log(e)

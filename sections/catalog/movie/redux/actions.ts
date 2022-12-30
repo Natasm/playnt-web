@@ -1,18 +1,21 @@
 import { Dispatch } from "redux"
 import { setLoadingReducer, setMovieChoicedReducer } from "../../../../redux/actions"
-import { findMovie, postMovieWebscraper } from "../../../../services/catalog"
-import { MovieWebScraper } from "../../../../services/catalog/interface/webscraper.interface"
+import { MovieCatalogResponse } from "../../../../services/catalog/interface/response.interface"
+import { upsertMovie } from "../../../../services/stream/movie"
+import { UpsertMovieRequest } from "../../../../services/stream/interface/request.interface"
 
-export const postMovieWebScraperAction = (movie: MovieWebScraper) => {
+export const postMovieAction = (movie: MovieCatalogResponse) => {
     return async function (dispatch: Dispatch) {
         try {
             dispatch(setLoadingReducer(true))
 
-            var movieResponse = await postMovieWebscraper(movie)
+            var upsertMovieRequest: UpsertMovieRequest = {
+                movie: movie
+            }
 
-            var movieFound = await findMovie({ id: movieResponse.data.id })
+            var movieResponse = await upsertMovie(upsertMovieRequest)
 
-            dispatch(setMovieChoicedReducer(movieFound.data))
+            dispatch(setMovieChoicedReducer(movieResponse))
 
         } catch (e) {
             console.log(e)

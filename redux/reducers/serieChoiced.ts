@@ -8,6 +8,9 @@ export const serieChoicedReducer = createSlice({
         setSerieChoicedReducer: (state, { payload }) => {
             return new SerieChoicedState({ ...state, serie: payload })
         },
+        setTMDBSerieChoicedReducer: (state, { payload }) => {
+            return new SerieChoicedState({ ...state, tmdb: payload })
+        },
         resetSerieChoicedReducer: () => {
             return new SerieChoicedState({})
         },

@@ -6,12 +6,16 @@ import {
 import { Button, Box, Stack, Typography } from '@mui/material';
 import { useRouter } from 'next/router';
 import { useAppDispatch } from '../../../redux/store';
-import { resetMediaReducer, setRouteActionTriggeredReducer } from '../../../redux/actions';
+import { setRouteActionTriggeredReducer } from '../../../redux/actions';
 import { useSelector } from 'react-redux';
-import { PlayerState, PlayerTitleType } from '../../../redux/state/player';
+import { PlayerState } from '../../../redux/state/player';
 import { SerieChoicedState } from '../../../redux/state/serieChoiced';
-import { getSerieWebscraperFromImdbAndSeasonAction } from '../redux/actions';
-import { postSerieWebScraperAction } from '../../catalog/serie/redux/actions';
+import { MediaChoicedState } from '../../../redux/state/mediaChoiced';
+import NextEpisodeButton from '../components/next-episode-button';
+import { MovieChoicedState } from '../../../redux/state/movieChoiced';
+
+import SpeedIcon from '@mui/icons-material/Speed';
+import DonutLargeIcon from '@mui/icons-material/DonutLarge';
 
 interface Props {
 	speedDownload: number,
@@ -24,34 +28,18 @@ export default function InfoStream(props: Props) {
 
 	const playerRedux: PlayerState = useSelector((state: any) => state.player)
 
+	const mediaChoicedRedux: MediaChoicedState = useSelector((state: any) => state.mediaChoiced)
+	const movieChoicedRedux: MovieChoicedState = useSelector((state: any) => state.movieChoiced)
 	const serieChoicedRedux: SerieChoicedState = useSelector((state: any) => state.serieChoiced)
 
 	const router = useRouter()
-
-	const showOtherEpisodes = async () => {
-		if (serieChoicedRedux?.serie?.imdb && serieChoicedRedux?.serie?.seasons[0]?.seasonNumber) {
-
-			const serieWebscraper = await dispatch(getSerieWebscraperFromImdbAndSeasonAction(
-				serieChoicedRedux.serie.imdb,
-				Number(serieChoicedRedux.serie.seasons[0].seasonNumber)
-			))
-
-			if (serieWebscraper) {
-				dispatch(resetMediaReducer())
-
-				await dispatch(postSerieWebScraperAction(serieWebscraper))
-
-				router.replace('/catalog/serie')
-			}
-		}
-	}
 
 	return (
 		<Box sx={{ padding: 4 }}>
 			<Stack direction="row" justifyContent="space-between">
 
 				<Stack direction="row">
-					
+
 					<Stack direction="column" justifyContent="center">
 						<Button
 							variant="contained"
@@ -78,24 +66,27 @@ export default function InfoStream(props: Props) {
 
 				<Stack direction="column" textAlign="center" spacing={1}>
 
-					{
-						playerRedux.titleType == PlayerTitleType.SERIE &&
-						<Button
-							variant="contained"
-							sx={{ color: 'white', backgroundColor: 'gray' }}
-							onClick={showOtherEpisodes}
-						>
-							Ver outros episódios
-						</Button>
-					}
+					<NextEpisodeButton />
 
-					<Typography sx={{ color: 'gray', zIndex: 0 }}>
-						{"Velocidade: " + formatBandWidth(props.speedDownload || 0)}
-					</Typography>
+					<Stack direction="row" spacing={2} sx={{ zIndex: 0 }}>
 
-					<Typography sx={{ color: 'gray', zIndex: 0 }}>
-						{"Progresso: " + formatProgress(props.progressDownload || 0)}
-					</Typography>
+						<SpeedIcon sx={{ color: "white" }} />
+
+						<Typography sx={{ color: 'gray' }}>
+							{formatBandWidth(props.speedDownload || 0)}
+						</Typography>
+
+					</Stack>
+
+					<Stack direction="row" spacing={2} sx={{ zIndex: 0 }}>
+
+						<DonutLargeIcon sx={{ color: "white" }} />
+
+						<Typography sx={{ color: 'gray' }}>
+							{formatProgress(props.progressDownload || 0)}
+						</Typography>
+
+					</Stack>
 
 				</Stack>
 

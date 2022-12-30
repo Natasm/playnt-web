@@ -23,6 +23,7 @@ export default function SearchField() {
     useEffect(() => {
 
         if (contextRedux.search !== '' && searchInput != '') {
+            
             dispatch(resetCatalogReducer())
 
             dispatch(loadCatalogBySearchAction(contextRedux.search))

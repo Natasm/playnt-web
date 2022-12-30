@@ -3,7 +3,7 @@ import { Box, Button, Grid, TextField, Typography } from "@material-ui/core"
 import { useAppDispatch } from '../../../redux/store'
 import { loginAction } from './redux/actions'
 
-export function FormLogin() {
+export default function FormLogin() {
 
     const dispatch = useAppDispatch()
 

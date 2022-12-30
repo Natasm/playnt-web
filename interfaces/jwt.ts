@@ -1,3 +1,3 @@
 export interface JwtDecodeUserToken {
-    id?: number
+    customerId?: number
 }

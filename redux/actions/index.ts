@@ -2,7 +2,7 @@ import { authReducer } from "../reducers/auth"
 import { cacheReducer } from "../reducers/cache"
 import { catalogReducer } from "../reducers/catalog"
 import { contextReducer } from "../reducers/context"
-import { mediaReducer } from "../reducers/media"
+import { mediaChoicedReducer } from "../reducers/mediaChoiced"
 import { movieChoicedReducer } from "../reducers/movieChoiced"
 import { playerReducer } from "../reducers/player"
 import { serieChoicedReducer } from "../reducers/serieChoiced"
@@ -27,8 +27,8 @@ export const {
 
 export const { 
     setTitlesCatalogReducer, 
-    setPageCatalogReducer, 
-    setHasMoreItemsCatalogReducer,
+    setPageCatalogReducer,
+    setHasMoreTitlesCatalogReducer,
     addTitlesCatalogReducer,
     addPageCatalogReducer,
     resetCatalogReducer
@@ -36,24 +36,26 @@ export const {
 
 export const { 
     setMovieChoicedReducer,
+    setTMDBMovieChoicedReducer,
     resetMovieChoicedReducer
 } = movieChoicedReducer.actions
 
 export const { 
     setSerieChoicedReducer,
+    setTMDBSerieChoicedReducer,
     resetSerieChoicedReducer
 } = serieChoicedReducer.actions
 
 export const { 
-    setMediaIdReducer,
-    setInfoHashFromMediaReducer, 
-    setInfoFilesFromMediaReducer,
-    resetMediaReducer
-} = mediaReducer.actions
+    setMovieMediaIdChoicedReducer,
+    setEpisodeMediaIdChoicedReducer,
+    setEpisodeIdMediaChoicedReducer,
+    setSeasonIdMediaChoicedReducer,
+    resetMediaChoicedReducer
+} = mediaChoicedReducer.actions
 
 export const { 
     setPermissionToHideControlsPlayerReducer,
-    setTitleTypePlayerReducer,
     setWatchedTillPlayerReducer,
     setFileNameStreamPlayerReducer,
     setInfoHashPlayerReducer,

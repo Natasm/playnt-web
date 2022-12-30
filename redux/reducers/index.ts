@@ -6,7 +6,7 @@ import cache from './cache'
 import catalog from './catalog'
 import movieChoiced from './movieChoiced'
 import serieChoiced from './serieChoiced'
-import media from './media'
+import mediaChoiced from './mediaChoiced'
 import player from './player'
 import subtitle from './subtitle'
 
@@ -17,7 +17,7 @@ export default combineReducers({
   catalog,
   movieChoiced,
   serieChoiced,
-  media,
+  mediaChoiced,
   player,
   subtitle
 })

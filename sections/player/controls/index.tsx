@@ -17,18 +17,18 @@ interface Props {
 
     pause: boolean,
 
-    handlePlayPause: any,
+    handlePlayPause: () => void,
 
     audioTracks: any,
     selectedAudio: any,
-    audioChange: any,
+    audioChange: (e: any) => void,
 
     subtitleTracks: any,
     selectedSubtitle: any,
-    subtitleChange: any,
+    subtitleChange: (e: any) => void,
 
     mutedAudio?: boolean,
-    mutedAudioChange?: any
+    mutedAudioChange?: () => void
 }
 
 export default function ControlsPlayer(props: Props) {

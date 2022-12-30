@@ -10,16 +10,13 @@ export default function Background(props: BackgroundProps) {
         <Box
             sx={{
                 height: '100vh',
-                width: '100vw',
-                backgroundPosition: 'center center',
-                backgroundSize: '40em 60em',
+                backgroundPosition: 'center',
+                backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundImage:
-                    `linear-gradient(to right, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 1)),` +
-                    `linear-gradient(to left, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
-                    `url(${props.url})`,
-                position: 'fixed',
-                overflowY: 'scroll'
+                    `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
+                    `linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)),` +
+                    `url(${props.url})`
             }}
             color='black'
         >

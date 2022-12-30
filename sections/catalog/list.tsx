@@ -6,22 +6,22 @@ import { useAppDispatch } from '../../redux/store';
 
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { MovieWebScraper, SerieWebScraper } from '../../services/catalog/interface/webscraper.interface';
 import {
     resetCatalogReducer,
-    resetMediaReducer,
+    resetMediaChoicedReducer,
     setRouteActionTriggeredReducer,
     setScrollTopPositionReducer
 } from '../../redux/actions';
-import { postMovieWebScraperAction } from './movie/redux/actions';
-import { postSerieWebScraperAction } from './serie/redux/actions';
 import { loadCatalogAction, loadCatalogBySearchAction } from './redux/actions';
 import { ContextState } from '../../redux/state/context';
 import { CatalogState } from '../../redux/state/catalog';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Box, CircularProgress } from '@material-ui/core';
 import Stack from '@mui/material/Stack';
+import { MovieCatalogResponse, MovieSerieCatalogResponse, SerieCatalogResponse } from '../../services/catalog/interface/response.interface';
+import { postMovieAction } from './movie/redux/actions';
+import { postSerieAction } from './serie/redux/actions';
+import { Box } from '@material-ui/core';
 
 export default function CatalogList() {
 
@@ -42,9 +42,9 @@ export default function CatalogList() {
 
             dispatch(resetCatalogReducer())
 
-            dispatch(resetMediaReducer())
+            dispatch(resetMediaChoicedReducer())
 
-            dispatch(loadCatalogAction())
+            loadCatalog()
         }
 
     }, [])
@@ -64,7 +64,7 @@ export default function CatalogList() {
         }
     }
 
-    const renderMovieItem = (movie: MovieWebScraper) => {
+    const renderMovieItem = (movie: MovieCatalogResponse) => {
 
         const onPress = async () => {
 
@@ -73,9 +73,9 @@ export default function CatalogList() {
             dispatch(setRouteActionTriggeredReducer("PUSH"))
 
             try {
-                dispatch(resetMediaReducer())
+                dispatch(resetMediaChoicedReducer())
 
-                await dispatch(postMovieWebScraperAction(movie))
+                await dispatch(postMovieAction(movie))
 
                 router.push('/catalog/movie')
 
@@ -85,27 +85,45 @@ export default function CatalogList() {
         }
 
         return (
-            <ImageListItem key={movie.imagePath + Math.random()}>
-                <Card sx={{ height: '100%' }}>
-                    <CardMedia
-                        component="img"
-                        image={movie.imagePath || ''}
-                        alt=""
-                    />
-                    <CardContent>
-                        <Typography style={{ wordWrap: "break-word" }} gutterBottom variant="h6" component="div">
-                            {movie.name || ''}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={onPress}>Escolho esse</Button>
-                    </CardActions>
-                </Card>
-            </ImageListItem>
+            <Stack
+                onClick={onPress}
+                sx={{
+                    borderRadius: 5,
+                    minHeight: 400,
+                    backgroundColor: 'black'
+                }}
+            >
+                <Box
+                    display="flex"
+                    key={Math.random()}
+                    sx={{
+                        padding: 4,
+                        height: '100%',
+                        backgroundPosition: 'center',
+                        borderRadius: 5,
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage:
+                            `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
+                            `url(${movie.imagePath || ""})`
+                    }}
+                    justifyContent="center"
+                >
+                </Box>
+
+                <Stack style={{ paddingTop: 15, paddingBottom: 15 }}>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 15 }}>
+                        Filme
+                    </Typography>
+                    <Typography textAlign="center" sx={{ color: 'white', fontSize: 20 }}>
+                        {movie.name ? movie.name : ""}
+                    </Typography>
+                </Stack>
+            </Stack>
         )
     }
 
-    const renderSerieItem = (serie: SerieWebScraper) => {
+    const renderSerieItem = (serie: SerieCatalogResponse) => {
 
         const onPress = async () => {
 
@@ -114,9 +132,9 @@ export default function CatalogList() {
             dispatch(setRouteActionTriggeredReducer("PUSH"))
 
             try {
-                dispatch(resetMediaReducer())
+                dispatch(resetMediaChoicedReducer())
 
-                await dispatch(postSerieWebScraperAction(serie))
+                await dispatch(postSerieAction(serie))
 
                 router.push('/catalog/serie')
 
@@ -126,23 +144,46 @@ export default function CatalogList() {
         }
 
         return (
-            <ImageListItem key={serie.imagePath + Math.random()}>
-                <Card sx={{ height: '100%' }}>
-                    <CardMedia
-                        component="img"
-                        image={serie.imagePath || ''}
-                        alt=""
-                    />
-                    <CardContent>
-                        <Typography style={{ wordWrap: "break-word" }} gutterBottom variant="h6" component="div">
-                            {`${serie.name} - ${serie?.seasons[0]?.seasonNumber || 0}ª Temporada` || ''}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small" onClick={onPress}>Escolho esse</Button>
-                    </CardActions>
-                </Card>
-            </ImageListItem>
+            <Stack
+                onClick={onPress}
+                sx={{
+                    borderRadius: 5,
+                    minHeight: 400,
+                    backgroundColor: 'black'
+                }}
+            >
+                <Box
+                    display="flex"
+                    key={Math.random()}
+                    sx={{
+                        padding: 4,
+                        height: '100%',
+                        borderRadius: 5,
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundImage:
+                            `linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)),` +
+                            `url(${serie.imagePath || ""})`
+                    }}
+                    justifyContent="center"
+                >
+                </Box>
+
+                <Stack style={{ paddingTop: 15, paddingBottom: 15 }}>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 15 }}>
+                        Série
+                    </Typography>
+
+                    <Typography textAlign="center" sx={{ color: 'white', fontSize: 22 }}>
+                        {serie.name ? serie.name : ""}
+                    </Typography>
+
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 18 }}>
+                        {serie.seasons[0].seasonNumber ? `${serie.seasons[0].seasonNumber}ª Temporada` : ""}
+                    </Typography>
+                </Stack>
+            </Stack>
         )
     }
 
@@ -151,13 +192,13 @@ export default function CatalogList() {
             <InfiniteScroll
                 dataLength={catalogRedux.titles.length}
                 next={loadCatalog}
-                hasMore={catalogRedux.hasMoreItems}
+                hasMore={catalogRedux.hasMoreTitles}
                 scrollThreshold={0.99}
                 loader={<div></div>}
             >
-                <ImageList cols={matches ? 6 : 2} gap={8} sx={{ padding: 1 }}>
+                <ImageList cols={matches ? 6 : 2} gap={12} sx={{ padding: 1 }}>
                     {
-                        catalogRedux.titles?.map((item: any) => {
+                        catalogRedux.titles?.map((item: MovieSerieCatalogResponse) => {
                             if (item?.movie) return renderMovieItem(item.movie)
                             if (item?.serie) return renderSerieItem(item.serie)
                         })
@@ -165,9 +206,11 @@ export default function CatalogList() {
                 </ImageList>
 
                 {
-                    !contextRedux.loading &&
+                    !contextRedux.loading && catalogRedux.hasMoreTitles &&
                     <Stack justifyContent="center" padding={5} direction="row">
-                        <Button onClick={loadCatalog} sx={{ padding: 3, fontSize: 20 }} variant='contained'>Carregar mais</Button>
+                        <Button onClick={loadCatalog} sx={{ padding: 3, borderRadius: 20, fontSize: 20 }} variant='contained'>
+                            Carregar mais
+                        </Button>
                     </Stack>
                 }
             </InfiniteScroll >

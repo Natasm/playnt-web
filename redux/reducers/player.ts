@@ -8,9 +8,6 @@ export const playerReducer = createSlice({
         setPermissionToHideControlsPlayerReducer: (state, { payload }) => {
             return new PlayerState({ ...state, permissionToHideControls: payload })
         },
-        setTitleTypePlayerReducer: (state, { payload }) => {
-            return new PlayerState({ ...state, titleType: payload })
-        },
         setWatchedTillPlayerReducer: (state, { payload }) => {
             return new PlayerState({ ...state, watchedTill: payload })
         },
