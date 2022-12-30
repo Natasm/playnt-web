@@ -1,7 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
-import { Box } from '@material-ui/core';
 
-import { Stack } from '@mui/material';
+import { Container, Stack } from '@mui/material';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -36,8 +35,7 @@ export default function TrendingList() {
         return (
             <img
                 key={posterPath + Math.random()}
-                width='200px'
-                height='300px'
+                style={{ height: 300, width: 200, padding: 5, borderRadius: 15 }}
                 src={`${posterPath}?w=164&h=164&fit=crop&auto=format`}
                 srcSet={`${posterPath}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
                 alt={""}
@@ -83,7 +81,7 @@ export default function TrendingList() {
     }
 
     return (
-        <Box style={{ padding: 20 }}>
+        <Container>
 
             {
                 data?.length > 0 &&
@@ -106,6 +104,6 @@ export default function TrendingList() {
                     data.map((item: MoviePopularityResponse) => renderItem(item.poster_path))
                 }
             </ScrollMenu>
-        </Box>
+        </Container>
     )
 };

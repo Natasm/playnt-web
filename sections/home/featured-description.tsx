@@ -1,8 +1,8 @@
-import { Typography, Box } from "@mui/material";
+import { Container } from "@material-ui/core";
 
 export default function FeaturedDescription() {
     return (
-        <Box sx={{ flexGrow: 1 }}>
+        <Container>
             <div
                 style={{
                     fontWeight: 100,
@@ -26,6 +26,6 @@ export default function FeaturedDescription() {
             >
                 Interestellar
             </div>
-        </Box>
+        </Container>
     )
 }

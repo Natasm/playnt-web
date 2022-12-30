@@ -1,10 +1,10 @@
 import axios from 'axios'
-import { Files } from './interface/file'
+import { CacheResponse } from './interface/response.interface'
 
-const URL_API_STREAM = process.env.NEXT_PUBLIC_URL_API_STREAM
+const URL_API_STREAM = process.env.NEXT_PUBLIC_API_STREAM_URL
 
 export const getDirectoryOrFileListStream = async () => {
-    return axios.get<Files>(`${URL_API_STREAM}/cache`)
+    return axios.get<CacheResponse>(`${URL_API_STREAM}/cache`)
 }
 
 export const deleteDirectoryOrFileListStream = async (listNamesToDelete: any[]) => {

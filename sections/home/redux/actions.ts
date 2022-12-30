@@ -1,6 +1,6 @@
 import { Dispatch } from "redux"
 import { setCacheReducer, setLoadingReducer } from "../../../redux/actions"
-import { deleteDirectoryOrFileListStream, getDirectoryOrFileListStream } from "../../../services/files"
+import { deleteDirectoryOrFileListStream, getDirectoryOrFileListStream } from "../../../services/stream/cache"
 import { DeleteUserStreamRequest } from "../../../services/stream/interface/request.interface"
 import { deleteUserStream } from "../../../services/stream/user-stream"
 

@@ -131,7 +131,9 @@ export default function Title() {
                 </Stack>
 
                 <Typography sx={{ color: 'gray', fontSize: 20, paddingBottom: 2 }}>
-                  {`${serieChoicedRedux?.serie?.seasons[0]?.seasonNumber || ''}ª Temporada`}
+                  { serieChoicedRedux?.serie?.seasons[0]?.seasonNumber?
+                    `${serieChoicedRedux?.serie?.seasons[0]?.seasonNumber}ª Temporada` : ""
+                  }
                 </Typography>
 
                 <Stack spacing={2}>

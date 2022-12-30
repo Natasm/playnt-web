@@ -93,3 +93,7 @@ export interface LoadTorrentResponse {
     fileName: string
     infoHash: string
 }
+
+export interface CacheResponse {
+    names: string[]
+}
