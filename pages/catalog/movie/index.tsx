@@ -9,9 +9,9 @@ import Head from 'next/head';
 import { hasCookie, getCookie, deleteCookie } from 'cookies-next'
 import jwt_decode from 'jwt-decode'
 import { JwtDecodeUserToken } from "../../../interfaces/jwt";
-import { useDispatch } from "react-redux";
 import { resetPlayerReducer, setUserIdReducer } from "../../../redux/actions";
 import { findUserByCustomerId } from "../../../services/stream/user";
+import { useAppDispatch } from "../../../redux/store";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
 
@@ -54,7 +54,7 @@ interface MovieTitleProps {
 
 const MovieTitlePage: NextPage<MovieTitleProps> = (props) => {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch()
 
     useEffect(() => {
         dispatch(setUserIdReducer(Number(props.userId)))
