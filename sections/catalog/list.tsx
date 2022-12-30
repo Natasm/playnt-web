@@ -180,7 +180,7 @@ export default function CatalogList() {
                     </Typography>
 
                     <Typography textAlign="center" sx={{ color: 'gray', fontSize: 18 }}>
-                        {serie.seasons[0].seasonNumber ? `${serie.seasons[0].seasonNumber}ª Temporada` : ""}
+                        {serie.seasons[0]?.seasonNumber ? `${serie.seasons[0].seasonNumber}ª Temporada` : ""}
                     </Typography>
                 </Stack>
             </Stack>
