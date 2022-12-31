@@ -47,10 +47,8 @@ export const {
 } = serieChoicedReducer.actions
 
 export const { 
-    setMovieMediaIdChoicedReducer,
-    setEpisodeMediaIdChoicedReducer,
-    setEpisodeIdMediaChoicedReducer,
-    setSeasonIdMediaChoicedReducer,
+    setMovieMediaChoicedReducer,
+    setSerieMediaChoicedReducer,
     resetMediaChoicedReducer
 } = mediaChoicedReducer.actions
 

@@ -271,21 +271,22 @@ export default function DefaultPlayer(props: Props) {
                     (prevTimePosition) => {
                         if (authRedux.userId) {
 
-                            if (mediaChoicedRedux?.movieMediaId) {
+                            if (mediaChoicedRedux.movieMediaId && mediaChoicedRedux.movieId) {
                                 
                                 upsertUserStream({
                                     userId: Number(authRedux.userId),
                                     movieMediaId: Number(mediaChoicedRedux?.movieMediaId),
+                                    movieId: Number(mediaChoicedRedux.movieId),
                                     watchedTill: prevTimePosition
                                 }).catch((err) => console.log(err))
 
-                            } else if (mediaChoicedRedux.episodeMediaId && mediaChoicedRedux.episodeId && mediaChoicedRedux.seasonId){
+                            } else if (mediaChoicedRedux.episodeMediaId && mediaChoicedRedux.episodeId && mediaChoicedRedux.serieId){
                                 
                                 upsertUserStream({
                                     userId: Number(authRedux.userId),
                                     episodeMediaId: Number(mediaChoicedRedux?.episodeMediaId),
                                     episodeId: Number(mediaChoicedRedux.episodeId),
-                                    seasonId: Number(mediaChoicedRedux.seasonId),
+                                    serieId: Number(mediaChoicedRedux.serieId),
                                     watchedTill: prevTimePosition
                                 }).catch((err) => console.log(err))
 

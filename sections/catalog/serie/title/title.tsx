@@ -15,7 +15,7 @@ import { EpisodeMediaResponse, EpisodeResponse, SeasonResponse } from '../../../
 import { LoadTorrentRequest } from '../../../../services/stream/interface/request.interface';
 import { useAppDispatch } from '../../../../redux/store';
 import { loadTorrentAction } from '../../redux/actions';
-import { setEpisodeIdMediaChoicedReducer, setEpisodeMediaIdChoicedReducer, setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSeasonIdMediaChoicedReducer } from '../../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSerieMediaChoicedReducer } from '../../../../redux/actions';
 
 export default function Title() {
 
@@ -44,9 +44,12 @@ export default function Title() {
 
       if (response) {
 
-        dispatch(setEpisodeMediaIdChoicedReducer(media.id))
-        dispatch(setEpisodeIdMediaChoicedReducer(episode.id))
-        dispatch(setSeasonIdMediaChoicedReducer(season.id))
+        dispatch(setSerieMediaChoicedReducer({
+          episodeId: episode.id,
+          episodeMediaId: media.id,
+          seasonId: season.id,
+          serieId: serieChoicedRedux.serie?.id
+        }))
 
         dispatch(setInfoHashPlayerReducer(response.infoHash))
         dispatch(setFileNameStreamPlayerReducer(response.fileName))

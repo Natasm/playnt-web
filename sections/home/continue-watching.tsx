@@ -11,7 +11,7 @@ import DialogConfirmRemoveUserWatching from './dialog/confirm-remove-user-watchi
 import { UserStreamResponse } from '../../services/stream/interface/response.interface';
 import { findAllUserStream } from '../../services/stream/user-stream';
 import { LoadTorrentRequest } from '../../services/stream/interface/request.interface';
-import { setEpisodeIdMediaChoicedReducer, setEpisodeMediaIdChoicedReducer, setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaIdChoicedReducer, setSeasonIdMediaChoicedReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaChoicedReducer, setSerieMediaChoicedReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
 import { loadTorrentAction } from '../catalog/redux/actions';
 import { removeUserStreamAction } from './redux/actions';
 import { Stack } from '@mui/system';
@@ -67,7 +67,10 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                 dispatch(setWatchedTillPlayerReducer(userStream.watchedTill))
 
                 if (response) {
-                    dispatch(setMovieMediaIdChoicedReducer(movieMedia.id))
+                    dispatch(setMovieMediaChoicedReducer({
+                        movieMediaId: movieMedia.id,
+                        movieId: userStream?.movieMedia?.movie.id
+                    }))
 
                     dispatch(setInfoHashPlayerReducer(response.infoHash))
                     dispatch(setFileNameStreamPlayerReducer(response.fileName))
@@ -125,7 +128,6 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
     const renderSerieItem = (userStream: UserStreamResponse) => {
 
         const serieName = userStream?.episode.season.serie.name
-        const season = userStream?.episode?.season
         const seasonNumber = userStream?.episode.season.seasonNumber
         const episode = userStream?.episode
         const episodeNumber = userStream?.episode.episodeNumber
@@ -150,9 +152,12 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
                 if (response) {
 
-                    dispatch(setEpisodeMediaIdChoicedReducer(episodeMedia.id))
-                    dispatch(setEpisodeIdMediaChoicedReducer(episode.id))
-                    dispatch(setSeasonIdMediaChoicedReducer(season.id))
+                    dispatch(setSerieMediaChoicedReducer({
+                        episodeId: episode.id,
+                        episodeMediaId: episodeMedia.id,
+                        seasonId: seasonNumber,
+                        serieId: userStream.episode.season.serie.id
+                    }))
 
                     dispatch(setInfoHashPlayerReducer(response.infoHash))
                     dispatch(setFileNameStreamPlayerReducer(response.fileName))

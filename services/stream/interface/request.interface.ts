@@ -39,10 +39,13 @@ export interface UpsertSerieRequest {
 export interface UpsertUserStreamRequest {
     userId: number
     watchedTill: number
+    
     movieMediaId?: number
+    movieId?: number
+    
     episodeMediaId?: number
     episodeId?: number
-    seasonId?: number
+    serieId?: number
 }
 
 export interface LoadTorrentRequest {

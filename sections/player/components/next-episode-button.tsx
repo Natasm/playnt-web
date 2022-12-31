@@ -3,15 +3,15 @@ import { useRouter } from 'next/router'
 import { Button } from '@mui/material';
 import { useAppDispatch } from '../../../redux/store';
 import { useSelector } from 'react-redux';
-import { PlayerState } from '../../../redux/state/player';
 import { SerieChoicedState } from '../../../redux/state/serieChoiced';
 import { MediaChoicedState } from '../../../redux/state/mediaChoiced';
-import { EpisodeMediaResponse, EpisodeResponse, SeasonResponse } from '../../../services/stream/interface/response.interface';
+import { EpisodeMediaResponse, EpisodeResponse, SeasonResponse, SerieResponse } from '../../../services/stream/interface/response.interface';
 import { LoadTorrentRequest } from '../../../services/stream/interface/request.interface';
 import { loadTorrentAction } from '../../catalog/redux/actions';
-import { setEpisodeIdMediaChoicedReducer, setEpisodeMediaIdChoicedReducer, setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSeasonIdMediaChoicedReducer } from '../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSerieMediaChoicedReducer } from '../../../redux/actions';
 
 interface NextEpisodeData {
+    nextSerie: SerieResponse,
     nextSeason: SeasonResponse,
     nextEpisode: EpisodeResponse,
     nextEpisodeMedia: EpisodeMediaResponse
@@ -53,8 +53,9 @@ export default function NextEpisodeButton() {
 
                 var nextEpisodeMedia = nextEpisode.media.find((media) => media.type == episodeMediaFound?.type)
 
-                if (nextEpisode && nextEpisodeMedia) {
+                if (serieChoicedRedux.serie && nextEpisode && nextEpisodeMedia) {
                     setNextEpisodeData({
+                        nextSerie: serieChoicedRedux.serie,
                         nextSeason: seasonFound,
                         nextEpisode,
                         nextEpisodeMedia
@@ -78,9 +79,12 @@ export default function NextEpisodeButton() {
 
             if (response) {
 
-                dispatch(setEpisodeMediaIdChoicedReducer(nextEpisodeData.nextEpisodeMedia.id))
-                dispatch(setEpisodeIdMediaChoicedReducer(nextEpisodeData.nextEpisode.id))
-                dispatch(setSeasonIdMediaChoicedReducer(nextEpisodeData.nextSeason.id))
+                dispatch(setSerieMediaChoicedReducer({
+                    episodeId: nextEpisodeData.nextEpisode.id,
+                    episodeMediaId: nextEpisodeData.nextEpisodeMedia.id,
+                    seasonId: nextEpisodeData.nextSeason.id,
+                    serieId: nextEpisodeData.nextSerie.id
+                }))
 
                 dispatch(setInfoHashPlayerReducer(response.infoHash))
                 dispatch(setFileNameStreamPlayerReducer(response.fileName))

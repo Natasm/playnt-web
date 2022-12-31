@@ -188,7 +188,7 @@ export default function CatalogList() {
     }
 
     return (
-        <>
+        <Box sx={{ padding: 15 }}>
             <InfiniteScroll
                 dataLength={catalogRedux.titles.length}
                 next={loadCatalog}
@@ -214,6 +214,6 @@ export default function CatalogList() {
                     </Stack>
                 }
             </InfiniteScroll >
-        </>
+        </Box>
     )
 };

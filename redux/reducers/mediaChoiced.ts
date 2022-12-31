@@ -5,17 +5,19 @@ export const mediaChoicedReducer = createSlice({
     name: 'mediaChoiced',
     initialState: new MediaChoicedState({}),
     reducers: {
-        setMovieMediaIdChoicedReducer: (state, { payload }) => {
-            return new MediaChoicedState({ ...state, movieMediaId: payload, episodeMediaId: undefined })
+        setSerieMediaChoicedReducer: (state, { payload }) => {
+            return new MediaChoicedState({ 
+                episodeMediaId: payload?.episodeMediaId,
+                episodeId: payload?.episodeId,
+                seasonId: payload?.seasonId,
+                serieId: payload?.serieId 
+            })
         },
-        setEpisodeMediaIdChoicedReducer: (state, { payload }) => {
-            return new MediaChoicedState({ ...state, episodeMediaId: payload, movieMediaId: undefined })
-        },
-        setEpisodeIdMediaChoicedReducer: (state, { payload }) => {
-            return new MediaChoicedState({ ...state, episodeId: payload })
-        },
-        setSeasonIdMediaChoicedReducer: (state, { payload }) => {
-            return new MediaChoicedState({ ...state, seasonId: payload })
+        setMovieMediaChoicedReducer: (state, { payload }) => {
+            return new MediaChoicedState({ 
+                movieId: payload?.movieId,
+                movieMediaId: payload?.movieMediaId
+            })
         },
         resetMediaChoicedReducer: () => {
             return new MediaChoicedState({})

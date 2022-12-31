@@ -14,7 +14,7 @@ import { MovieMediaResponse } from '../../../../services/stream/interface/respon
 import { useAppDispatch } from '../../../../redux/store';
 import { loadTorrentAction } from '../../redux/actions';
 import { LoadTorrentRequest } from '../../../../services/stream/interface/request.interface';
-import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaIdChoicedReducer } from '../../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaChoicedReducer } from '../../../../redux/actions';
 
 export default function Title() {
 
@@ -40,7 +40,10 @@ export default function Title() {
 
       if (response) {
 
-        dispatch(setMovieMediaIdChoicedReducer(media.id))
+        dispatch(setMovieMediaChoicedReducer({
+          movieMediaId: media.id,
+          movieId: movieChoicedRedux.movie?.id
+        }))
 
         dispatch(setInfoHashPlayerReducer(response.infoHash))
         dispatch(setFileNameStreamPlayerReducer(response.fileName))
