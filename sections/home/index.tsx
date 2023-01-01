@@ -26,10 +26,9 @@ export default function Home(props: HomeProps) {
                 <FeaturedDescription />
             </div>
 
-            <div>
-                <TrendingList />
-                <ContinueWatching userId={props.userId} />
-            </div>
+            <TrendingList />
+            
+            <ContinueWatching userId={props.userId} />
 
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}

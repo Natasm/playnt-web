@@ -6,7 +6,7 @@ import { useAppDispatch } from '../../redux/store';
 
 import { useTheme } from '@material-ui/core/styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
-import { Box, Container } from '@material-ui/core';
+import { Box } from '@material-ui/core';
 import DialogConfirmRemoveUserWatching from './dialog/confirm-remove-user-watching';
 import { UserStreamResponse } from '../../services/stream/interface/response.interface';
 import { findAllUserStream } from '../../services/stream/user-stream';
@@ -230,7 +230,7 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
     }
 
     return (
-        <Container style={{ paddingBottom: 20 }}>
+        <Box style={{ paddingLeft: 60, paddingBottom: 40, paddingRight: 60 }}>
 
             <DialogConfirmRemoveUserWatching
                 open={openModalDelete}
@@ -260,6 +260,6 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
                     })
                 }
             </ImageList>
-        </Container>
+        </Box>
     )
 };

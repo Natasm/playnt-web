@@ -5,7 +5,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { useSelector } from 'react-redux';
 import { ContextState } from '../../redux/state/context';
 import { useAppDispatch } from '../../redux/store';
-import { setCatalogSourceReducer } from '../../redux/actions';
+import { setCatalogSourceReducer, setPageCatalogReducer } from '../../redux/actions';
+import { loadCatalogAction, loadCatalogBySearchAction } from './redux/actions';
 
 export default function SelectCatalogSource() {
 
@@ -14,7 +15,14 @@ export default function SelectCatalogSource() {
     const contextRedux: ContextState = useSelector((state: any) => state.context)
 
     const handleChange = (event: SelectChangeEvent) => {
+        dispatch(setPageCatalogReducer(1))
         dispatch(setCatalogSourceReducer(Number(event.target.value)))
+
+        if (contextRedux.search !== '') {
+            dispatch(loadCatalogBySearchAction(contextRedux.search))
+        } else {
+            dispatch(loadCatalogAction())
+        }
     };
 
     return (

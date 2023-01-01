@@ -72,7 +72,6 @@ export default function Title() {
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundImage:
-              `linear-gradient(to left, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)),` +
               `url(${tmdbEpisode?.still_path || ""})`
           }}
           justifyContent="center"

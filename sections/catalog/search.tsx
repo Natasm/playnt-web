@@ -1,7 +1,7 @@
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { resetCatalogReducer, setSearchReducer } from "../../redux/actions";
+import { resetCatalogReducer, setPageCatalogReducer, setSearchReducer } from "../../redux/actions";
 import { ContextState } from "../../redux/state/context";
 import { useAppDispatch } from "../../redux/store";
 import { loadCatalogBySearchAction } from "./redux/actions";
@@ -23,9 +23,8 @@ export default function SearchField() {
     useEffect(() => {
 
         if (contextRedux.search !== '' && searchInput != '') {
-            
             dispatch(resetCatalogReducer())
-
+            dispatch(setPageCatalogReducer(1))
             dispatch(loadCatalogBySearchAction(contextRedux.search))
         }
 

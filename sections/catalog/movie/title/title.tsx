@@ -66,7 +66,6 @@ export default function Title() {
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundImage:
-              `linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1)),` +
               `url(${movieChoicedRedux?.tmdb?.movie_results[0]?.backdrop_path || ""})`
           }}
           justifyContent="center"

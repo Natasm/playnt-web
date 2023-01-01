@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 
-import { Container, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -81,7 +81,7 @@ export default function TrendingList() {
     }
 
     return (
-        <Container>
+        <Box sx={{ padding: 7 }}>
 
             {
                 data?.length > 0 &&
@@ -104,6 +104,6 @@ export default function TrendingList() {
                     data.map((item: MoviePopularityResponse) => renderItem(item.poster_path))
                 }
             </ScrollMenu>
-        </Container>
+        </Box>
     )
 };

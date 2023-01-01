@@ -11,7 +11,7 @@ export const getMoviesByPopularity = async (page: number = 1) => {
 export const getCatalogList = async (page: number, catalogSource: number = 1): Promise<MovieSerieCatalogResponse[]> => {
     const params = `?page=${page}&catalogSource=${catalogSource}`
     
-    const response = await axios.get<MovieSerieCatalogResponse[]>(`${API_CATALOG_URL}/catalog${params}`)
+    const response = await axios.get<MovieSerieCatalogResponse[]>(`${API_CATALOG_URL}/catalog${params}`, { timeout: 40000 })
 
     return response.data
 }
@@ -19,7 +19,7 @@ export const getCatalogList = async (page: number, catalogSource: number = 1): P
 export const getCatalogListBySearch = async (search: string, page: number, catalogSource: number = 1): Promise<MovieSerieCatalogResponse[]> => {
     const params = `?search=${search}&page=${page}&catalogSource=${catalogSource}`
     
-    const response = await axios.get<MovieSerieCatalogResponse[]>(`${API_CATALOG_URL}/catalog${params}`)
+    const response = await axios.get<MovieSerieCatalogResponse[]>(`${API_CATALOG_URL}/catalog${params}`, { timeout: 40000 })
 
     return response.data
 }
