@@ -4,6 +4,8 @@ import { ContextState } from '../../redux/state/context';
 import Background from './background';
 import AppBarCustom from './appBar';
 import CatalogList from './list';
+import { useEffect, useState } from "react";
+import { getMoviesByPopularity } from "../../services/catalog/titles";
 
 interface CatalogProps {
     userId: number
@@ -13,9 +15,27 @@ export default function Catalog(props: CatalogProps) {
 
     const contextRedux: ContextState = useSelector((state: any) => state.context)
 
+    const [url, setUrl] = useState("");
+
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    const loadData = async () => {
+        try {
+            const response = await getMoviesByPopularity()
+
+            if (response) {
+                setUrl(response.results[0]?.backdrop_path)
+            }
+        } catch (e) {
+
+        }
+    }
+
     return (
         <>
-            <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
+            <Background url={url}>
 
                 <AppBarCustom />
 

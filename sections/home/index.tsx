@@ -1,6 +1,9 @@
 import { Backdrop, CircularProgress } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { ContextState } from '../../redux/state/context';
+import { TMDBMoviePopularityDto } from '../../services/catalog/interface/response.interface';
+import { getMoviesByPopularity } from '../../services/catalog/titles';
 import AppBarMain from './appBar';
 import Background from './background';
 import ContinueWatching from './continue-watching';
@@ -16,17 +19,35 @@ export default function Home(props: HomeProps) {
 
     const contextRedux: ContextState = useSelector((state: any) => state.context)
 
+    const [data, setData] = useState<TMDBMoviePopularityDto[]>([])
+
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    const loadData = async () => {
+        try {
+            const response = await getMoviesByPopularity()
+
+            if (response) {
+                setData(response.results)
+            }
+        } catch (e) {
+
+        }
+    }
+
     return (
 
-        <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
+        <Background url={data[0]?.backdrop_path || ""}>
 
             <AppBarMain />
 
             <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 100 }}>
-                <FeaturedDescription />
+                <FeaturedDescription data={data[0]}/>
             </div>
 
-            <TrendingList />
+            <TrendingList data={data}/>
             
             <ContinueWatching userId={props.userId} />
 

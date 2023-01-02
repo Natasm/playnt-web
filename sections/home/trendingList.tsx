@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useContext } from 'react';
 
 import { Box, Stack } from '@mui/material';
 
@@ -6,29 +6,13 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { ScrollMenu, VisibilityContext } from 'react-horizontal-scrolling-menu';
-import { MoviePopularityResponse } from '../../services/catalog/interface/response.interface';
+import { TMDBMoviePopularityDto } from '../../services/catalog/interface/response.interface';
 
-import { getMoviesByPopularity } from '../../services/catalog/titles';
+interface Props {
+    data: TMDBMoviePopularityDto[]
+}
 
-export default function TrendingList() {
-
-    const [data, setData] = useState<MoviePopularityResponse[]>([])
-
-    useEffect(() => {
-        loadData()
-    }, [])
-
-    const loadData = async () => {
-        try {
-            const response = await getMoviesByPopularity()
-
-            if (response?.data?.results) {
-                setData(response.data.results)
-            }
-        } catch (e) {
-
-        }
-    }
+export default function TrendingList(props: Props) {
 
     const renderItem = (posterPath: string) => {
 
@@ -84,7 +68,7 @@ export default function TrendingList() {
         <Box sx={{ padding: 7 }}>
 
             {
-                data?.length > 0 &&
+                props.data?.length > 0 &&
                 <h2
                     style={{
                         letterSpacing: '.1rem',
@@ -101,7 +85,7 @@ export default function TrendingList() {
                 RightArrow={RightArrow}
             >
                 {
-                    data.map((item: MoviePopularityResponse) => renderItem(item.poster_path))
+                    props.data.map((item: TMDBMoviePopularityDto) => renderItem(item.poster_path))
                 }
             </ScrollMenu>
         </Box>

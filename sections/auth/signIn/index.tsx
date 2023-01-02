@@ -1,6 +1,8 @@
 import { Backdrop, CircularProgress } from "@mui/material"
+import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { ContextState } from "../../../redux/state/context"
+import { getMoviesByPopularity } from "../../../services/catalog/titles"
 import AppBarSimple from "./appBarSimple"
 import Background from "./background"
 import FormLogin from "./form"
@@ -8,9 +10,27 @@ import FormLogin from "./form"
 export default function SignIn() {
 
     const contextRedux: ContextState = useSelector((state: any) => state.context)
+    
+    const [url, setUrl] = useState("");
+
+    useEffect(() => {
+        loadData()
+    }, [])
+
+    const loadData = async () => {
+        try {
+            const response = await getMoviesByPopularity()
+
+            if (response) {
+                setUrl(response.results[0]?.backdrop_path)
+            }
+        } catch (e) {
+
+        }
+    }
 
     return (
-        <Background url="https://www.itl.cat/pngfile/big/22-226927_interstellar-movie.jpg">
+        <Background url={url}>
 
             <AppBarSimple />
 

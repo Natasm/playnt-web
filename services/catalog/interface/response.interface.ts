@@ -1,7 +1,3 @@
-export interface MoviePopularityResponse {
-    poster_path: string
-}
-
 export interface MediaCatalogResponse {
     magnet: string;
     type: string;
@@ -72,6 +68,9 @@ export interface TMDBFindResponseDto {
 
 export interface TMDBMoviePopularityDto {
     poster_path: string
+    backdrop_path: string
+    title: string
+    overview: string
 }
 
 export interface TMDBMoviePopularityResponseDto {

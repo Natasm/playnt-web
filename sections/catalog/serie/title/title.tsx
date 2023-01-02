@@ -156,7 +156,7 @@ export default function Title() {
           </Box>
         </Grid>
 
-        <Grid container spacing={2} sx={{ padding: 3 }}>
+        <Grid container spacing={2} sx={{ padding: 6 }}>
           {
             serieChoicedRedux?.serie?.seasons[0]?.episodes?.sort((ep1, ep2) => {
               if (ep1.episodeNumber <= ep2.episodeNumber) return -1

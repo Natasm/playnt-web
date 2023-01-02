@@ -1,11 +1,14 @@
 import axios from 'axios'
 import { FindCatalogTMDBRequest } from './interface/request.interface'
-import { MovieSerieCatalogResponse, TMDBFindResponseDto } from './interface/response.interface'
+import { MovieSerieCatalogResponse, TMDBFindResponseDto, TMDBMoviePopularityResponseDto } from './interface/response.interface'
 
 const API_CATALOG_URL = process.env.NEXT_PUBLIC_API_CATALOG_URL
 
-export const getMoviesByPopularity = async (page: number = 1) => {
-    return axios.get(`${API_CATALOG_URL}/catalog/movie/popularity?page=${page}`)
+export const getMoviesByPopularity = async (page: number = 1): Promise<TMDBMoviePopularityResponseDto> => {
+    
+    const response = await axios.get<TMDBMoviePopularityResponseDto>(`${API_CATALOG_URL}/catalog/movie/popularity?page=${page}`)
+
+    return response.data
 }
 
 export const getCatalogList = async (page: number, catalogSource: number = 1): Promise<MovieSerieCatalogResponse[]> => {
