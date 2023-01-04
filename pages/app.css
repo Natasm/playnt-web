@@ -2,4 +2,9 @@ html,
 body {
     margin: 0;
     background-color: black;
+    overflow-y: auto;
+}
+
+body::-webkit-scrollbar {
+    width: 0px;
 }
