@@ -2,18 +2,4 @@ html,
 body {
     margin: 0;
     background-color: black;
-    overflow-y: initial;
-}
-
-body::-webkit-scrollbar {
-    width: 15px;
-}
-
-body::-webkit-scrollbar-track {
-    background: black;
-}
-
-body::-webkit-scrollbar-thumb {
-    background-color: rgb(12, 12, 49);
-    border-radius: 20px;
 }
