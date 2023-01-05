@@ -8,7 +8,7 @@ import { MediaChoicedState } from '../../../redux/state/mediaChoiced';
 import { EpisodeMediaResponse, EpisodeResponse, SeasonResponse, SerieResponse } from '../../../services/stream/interface/response.interface';
 import { LoadTorrentRequest } from '../../../services/stream/interface/request.interface';
 import { loadTorrentAction } from '../../catalog/redux/actions';
-import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSerieMediaChoicedReducer } from '../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setLoadingReducer, setSerieMediaChoicedReducer } from '../../../redux/actions';
 
 interface NextEpisodeData {
     nextSerie: SerieResponse,
@@ -33,16 +33,22 @@ export default function NextEpisodeButton() {
         getNextEpisodeData()
     }, [mediaChoicedRedux])
 
+    useEffect(() => {
+        return () => {
+            dispatch(setLoadingReducer(false))
+        }
+    }, [])
+
     const getNextEpisodeData = async () => {
-        
+
         var seasonIdCurrent = mediaChoicedRedux.seasonId
         var episodeIdCurrent = mediaChoicedRedux.episodeId
         var episodeMediaIdCurrent = mediaChoicedRedux.episodeMediaId
-        
+
         var seasonFound = serieChoicedRedux.serie?.seasons?.find((season) => season.id == seasonIdCurrent)
 
         if (seasonFound) {
-            
+
             var episodeIndex = seasonFound.episodes.findIndex((episode) => episode.id == episodeIdCurrent)
 
             if (episodeIndex != -1 && seasonFound.episodes.length > episodeIndex + 1) {
@@ -88,6 +94,8 @@ export default function NextEpisodeButton() {
 
                 dispatch(setInfoHashPlayerReducer(response.infoHash))
                 dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+                dispatch(setLoadingReducer(true))
 
                 router.push("/player")
             }

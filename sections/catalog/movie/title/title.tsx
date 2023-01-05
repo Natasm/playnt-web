@@ -1,6 +1,7 @@
 import {
   Typography, Box, Grid, Stack
 } from '@mui/material';
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouter } from 'next/router';
 import { MovieChoicedState } from '../../../../redux/state/movieChoiced';
@@ -14,7 +15,7 @@ import { MovieMediaResponse } from '../../../../services/stream/interface/respon
 import { useAppDispatch } from '../../../../redux/store';
 import { loadTorrentAction } from '../../redux/actions';
 import { LoadTorrentRequest } from '../../../../services/stream/interface/request.interface';
-import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaChoicedReducer } from '../../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setLoadingReducer, setMovieMediaChoicedReducer } from '../../../../redux/actions';
 
 export default function Title() {
 
@@ -27,10 +28,16 @@ export default function Title() {
 
   const movieChoicedRedux: MovieChoicedState = useSelector((state: any) => state.movieChoiced)
 
+  useEffect(() => {
+    return () => {
+      dispatch(setLoadingReducer(false))
+    }
+  }, [])
+
   const renderMediaItem = (media: MovieMediaResponse) => {
 
     const play = async () => {
-      
+
       const request: LoadTorrentRequest = {
         magnet: media.magnet,
         movieMediaId: media.id
@@ -47,6 +54,8 @@ export default function Title() {
 
         dispatch(setInfoHashPlayerReducer(response.infoHash))
         dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+        dispatch(setLoadingReducer(true))
 
         router.push("/player")
       }
@@ -137,7 +146,7 @@ export default function Title() {
           </Box>
         </Grid>
 
-        <Grid container  spacing={2} sx={{ padding: 3 }}>
+        <Grid container spacing={2} sx={{ padding: 6 }}>
           {
             movieChoicedRedux?.movie?.media?.map((media: MovieMediaResponse) =>
               <Grid item key={media.magnet} xs={12} sm={12} md={4} style={{ paddingBottom: 20 }}>
