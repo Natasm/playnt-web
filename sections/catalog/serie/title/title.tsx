@@ -15,7 +15,8 @@ import { EpisodeMediaResponse, EpisodeResponse, SeasonResponse } from '../../../
 import { LoadTorrentRequest } from '../../../../services/stream/interface/request.interface';
 import { useAppDispatch } from '../../../../redux/store';
 import { loadTorrentAction } from '../../redux/actions';
-import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setSerieMediaChoicedReducer } from '../../../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setLoadingReducer, setSerieMediaChoicedReducer } from '../../../../redux/actions';
+import { useEffect } from 'react';
 
 export default function Title() {
 
@@ -27,6 +28,12 @@ export default function Title() {
   const matchesUpMd = useMediaQuery(theme.breakpoints.up('md'));
 
   const serieChoicedRedux: SerieChoicedState = useSelector((state: any) => state.serieChoiced)
+
+  useEffect(() => {
+    return () => {
+      dispatch(setLoadingReducer(false))
+    }
+  }, [])
 
   const renderMediaItem = (season: SeasonResponse, episode: EpisodeResponse, media: EpisodeMediaResponse) => {
 
@@ -54,6 +61,8 @@ export default function Title() {
         dispatch(setInfoHashPlayerReducer(response.infoHash))
         dispatch(setFileNameStreamPlayerReducer(response.fileName))
 
+        dispatch(setLoadingReducer(true))
+
         router.push("/player")
       }
 
@@ -68,7 +77,7 @@ export default function Title() {
           sx={{
             padding: 4,
             backgroundPosition: 'center',
-            borderRadius: 3,
+            borderRadius: 2,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             backgroundImage:

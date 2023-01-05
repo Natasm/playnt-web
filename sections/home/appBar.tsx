@@ -1,22 +1,35 @@
 import { AppBar, Button, Typography, Box, Toolbar } from "@mui/material";
 import { useRouter } from "next/router";
-import { setRouteActionTriggeredReducer } from "../../redux/actions";
+import { useEffect } from "react";
+import { setLoadingReducer, setRouteActionTriggeredReducer } from "../../redux/actions";
 import { useAppDispatch } from "../../redux/store";
-import { DialogButtonCache } from "./cache";
+import { DialogButtonCache } from "./dialog/cache";
 
 export default function AppBarMain() {
 
     const dispatch = useAppDispatch()
 
-    const route = useRouter()
+    const router = useRouter()
+
+    useEffect(() => {
+        return () => {
+            dispatch(setLoadingReducer(false))
+        }
+    },[])
 
     const navigateToMoviePage = () => {
         dispatch(setRouteActionTriggeredReducer("PUSH"))
-        route.push('catalog')
+        
+        dispatch(setLoadingReducer(true))
+        
+        router.push('catalog')
+        
     }
 
     const navigateToDownloadedPage = () => {
-        route.push('downloaded')
+        dispatch(setLoadingReducer(true))
+
+        router.push('downloaded')
     }
 
     return (
@@ -52,7 +65,7 @@ export default function AppBarMain() {
                         <Button sx={{ color: 'white' }} onClick={navigateToMoviePage}>Filmes e Séries</Button>
                     </Box>
 
-                    <div style={{ marginLeft: 'auto'}}>
+                    <div>
                         {/*<Button sx={{ color: 'white' }} onClick={navigateToDownloadedPage}>Baixados</Button>*/}
                         <DialogButtonCache />
                     </div>

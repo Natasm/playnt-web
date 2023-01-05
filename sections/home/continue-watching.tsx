@@ -11,7 +11,7 @@ import DialogConfirmRemoveUserWatching from './dialog/confirm-remove-user-watchi
 import { UserStreamResponse } from '../../services/stream/interface/response.interface';
 import { findAllUserStream } from '../../services/stream/user-stream';
 import { LoadTorrentRequest } from '../../services/stream/interface/request.interface';
-import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setMovieMediaChoicedReducer, setSerieMediaChoicedReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
+import { setFileNameStreamPlayerReducer, setInfoHashPlayerReducer, setLoadingReducer, setMovieMediaChoicedReducer, setSerieMediaChoicedReducer, setWatchedTillPlayerReducer } from '../../redux/actions';
 import { loadTorrentAction } from '../catalog/redux/actions';
 import { removeUserStreamAction } from './redux/actions';
 import { Stack } from '@mui/system';
@@ -47,6 +47,12 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
         getUserStreamList()
     }, [])
 
+    useEffect(() => {
+        return () => {
+            dispatch(setLoadingReducer(false))
+        }
+    }, [])
+
     const renderMovieItem = (userStream: UserStreamResponse) => {
 
         const movieName = userStream?.movieMedia?.movie.name
@@ -74,6 +80,8 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
                     dispatch(setInfoHashPlayerReducer(response.infoHash))
                     dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+                    dispatch(setLoadingReducer(true))
 
                     router.push("/player")
                 }
@@ -161,6 +169,8 @@ export default function ContinueWatching(props: ContinueWatchingProps) {
 
                     dispatch(setInfoHashPlayerReducer(response.infoHash))
                     dispatch(setFileNameStreamPlayerReducer(response.fileName))
+
+                    dispatch(setLoadingReducer(true))
 
                     router.push("/player")
                 }

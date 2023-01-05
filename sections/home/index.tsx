@@ -38,18 +38,20 @@ export default function Home(props: HomeProps) {
     }
 
     return (
+        <>
+            <Background url={data[0]?.backdrop_path || ""}>
 
-        <Background url={data[0]?.backdrop_path || ""}>
+                <AppBarMain />
 
-            <AppBarMain />
+                <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 100 }}>
+                    <FeaturedDescription data={data[0]} />
+                </div>
 
-            <div style={{ paddingLeft: 20, paddingTop: 200, paddingBottom: 100 }}>
-                <FeaturedDescription data={data[0]}/>
-            </div>
+                <TrendingList data={data} />
 
-            <TrendingList data={data}/>
-            
-            <ContinueWatching userId={props.userId} />
+                <ContinueWatching userId={props.userId} />
+
+            </Background>
 
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -57,8 +59,7 @@ export default function Home(props: HomeProps) {
             >
                 <CircularProgress color="inherit" />
             </Backdrop>
-
-        </Background>
+        </>
     );
 
 }

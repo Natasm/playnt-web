@@ -6,11 +6,11 @@ import Dialog from '@mui/material/Dialog';
 import { useSelector } from 'react-redux';
 import { Button, Checkbox, FormControlLabel } from '@mui/material';
 import { useState } from 'react';
-import { useAppDispatch } from '../../redux/store';
-import { setCacheReducer } from '../../redux/actions';
-import { deleteCacheSelectedAction, loadCacheAction } from './redux/actions';
-import { ContextState } from '../../redux/state/context';
-import { CacheState } from '../../redux/state/cache';
+import { useAppDispatch } from '../../../redux/store';
+import { setCacheReducer } from '../../../redux/actions';
+import { deleteCacheSelectedAction, loadCacheAction } from '../redux/actions';
+import { ContextState } from '../../../redux/state/context';
+import { CacheState } from '../../../redux/state/cache';
 
 export function DialogButtonCache() {
 

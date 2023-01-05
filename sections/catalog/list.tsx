@@ -9,6 +9,7 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import {
     resetCatalogReducer,
     resetMediaChoicedReducer,
+    setLoadingReducer,
     setRouteActionTriggeredReducer,
     setScrollTopPositionReducer
 } from '../../redux/actions';
@@ -64,6 +65,12 @@ export default function CatalogList() {
         }
     }
 
+    useEffect(() => {
+        return () => {
+            dispatch(setLoadingReducer(false))
+        }
+    },[])
+
     const renderMovieItem = (movie: MovieCatalogResponse) => {
 
         const onPress = async () => {
@@ -76,6 +83,8 @@ export default function CatalogList() {
                 dispatch(resetMediaChoicedReducer())
 
                 await dispatch(postMovieAction(movie))
+
+                dispatch(setLoadingReducer(true))
 
                 router.push('/catalog/movie')
 
@@ -99,7 +108,7 @@ export default function CatalogList() {
                     style={{
                         padding: 4,
                         height: '100%',
-                        backgroundPosition: 'center',
+                        backgroundPosition: 'top center',
                         borderRadius: 5,
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
@@ -112,7 +121,7 @@ export default function CatalogList() {
                 </Box>
 
                 <Stack style={{ paddingTop: 15, paddingBottom: 15 }}>
-                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 15 }}>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 18 }}>
                         Filme
                     </Typography>
                     <Typography textAlign="center" sx={{ color: 'white', fontSize: 20 }}>
@@ -135,6 +144,8 @@ export default function CatalogList() {
                 dispatch(resetMediaChoicedReducer())
 
                 await dispatch(postSerieAction(serie))
+
+                dispatch(setLoadingReducer(true))
 
                 router.push('/catalog/serie')
 
@@ -159,7 +170,7 @@ export default function CatalogList() {
                         padding: 4,
                         height: '100%',
                         borderRadius: 5,
-                        backgroundPosition: 'center',
+                        backgroundPosition: 'top center',
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',
                         backgroundImage:
@@ -171,7 +182,7 @@ export default function CatalogList() {
                 </Box>
 
                 <Stack style={{ paddingTop: 15, paddingBottom: 15 }}>
-                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 15 }}>
+                    <Typography textAlign="center" sx={{ color: 'gray', fontSize: 18 }}>
                         Série
                     </Typography>
 
@@ -188,7 +199,7 @@ export default function CatalogList() {
     }
 
     return (
-        <Box sx={{ padding: 15 }}>
+        <Box>
             <InfiniteScroll
                 dataLength={catalogRedux.titles.length}
                 next={loadCatalog}
@@ -196,7 +207,7 @@ export default function CatalogList() {
                 scrollThreshold={0.99}
                 loader={<div></div>}
             >
-                <ImageList cols={matches ? 6 : 2} gap={12} sx={{ padding: 1 }}>
+                <ImageList cols={matches ? 6 : 2} gap={12} sx={{ padding: 5 }}>
                     {
                         catalogRedux.titles?.map((item: MovieSerieCatalogResponse) => {
                             if (item?.movie) return renderMovieItem(item.movie)
